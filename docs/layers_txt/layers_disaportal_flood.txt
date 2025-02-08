@@ -1,0 +1,64 @@
+{
+  "layers": [
+    {
+      "type": "Layer",
+      "id": "01_flood_l2_shinsuishin_data",
+      "title": "洪水浸水想定区域（想定最大規模）",
+      "url": "https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png",
+      "cocotile": true,
+      "minZoom": 2,
+      "maxZoom": 17,
+      "html": "<div class=\"gsi_layerinfo_title\">洪水浸水想定区域（想定最大規模）</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">河川が氾濫した際に浸水が想定される区域と水深（想定し得る最大規模の降雨（計画規模を上回るもの））</div><div style=\"font-weight:bold;\">凡例</div><div style=\"border-bottom:1px dotted #2c6983;\"><img src=\"https://disaportal.gsi.go.jp/maps/image/legend/shinsui_legend3.png\" alt=\"凡例\"></div><div style=\"font-weight:bold;\">注意点</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">このシミュレーションの実施にあたっては、支川の氾濫、シミュレーションの前提となる降雨を超える規模の降雨、高潮及び内水による氾濫等を考慮していません（ただし、東京都が管理する河川のみ内水による氾濫を考慮しています）ので、この浸水想定区域に指定されていない区域においても浸水が発生する場合や想定される水深が実際の浸水深と異なる場合があります。なお、東京都の公表図面では浸水深0.1m未満の区域は着色されていないため、本サイトにおいても同様の表現としております。</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\"><a href=\"https://disaportal.gsi.go.jp/hazardmap/copyright/kasen_kuni_sinsuiL2.html\" target=\"_blank\">データの掲載状況一覧（国管理河川）</a><br><a href=\"https://disaportal.gsi.go.jp/hazardmap/copyright/kasen_pref_sinsuiL2.html\" target=\"_blank\">データの掲載状況一覧（都道府県管理河川）</a><br><a href=\"https://disaportal.gsi.go.jp/hazardmap/copyright/copyright.html\" target=\"_blank\">データについて</a></div>"
+    },
+    {
+      "type": "Layer",
+      "id": "01_flood_l1_shinsuishin_newlegend_data",
+      "title": "洪水浸水想定区域（計画規模（現在の凡例））",
+      "url": "https://disaportaldata.gsi.go.jp/raster/01_flood_l1_shinsuishin_newlegend_data/{z}/{x}/{y}.png",
+      "cocotile": true,
+      "minZoom": 2,
+      "maxZoom": 17,
+      "html": "<div class=\"gsi_layerinfo_title\">洪水浸水想定区域（計画規模（現在の凡例））</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">河川が氾濫した際に浸水が想定される区域と水深（10年～100年に1回程度の降雨規模）</div><div style=\"font-weight:bold;\">凡例</div><div style=\"border-bottom:1px dotted #2c6983;\"><img src=\"https://disaportal.gsi.go.jp/maps/image/legend/shinsui_legend3.png\" alt=\"凡例\"></div><div style=\"font-weight:bold;\">注意点</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">このシミュレーションの実施にあたっては、支川の氾濫、シミュレーションの前提となる降雨を超える規模の降雨、高潮及び内水による氾濫等を考慮していませんので、この浸水想定区域に指定されていない区域においても浸水が発生する場合や想定される水深が実際の浸水深と異なる場合があります。<br>本データは整備中の地域もあるため、必ずデータ作成時点が異なる「洪水浸水想定区域（計画規模（旧凡例））」のデータもあわせてご確認ください。詳細は、「データの掲載状況一覧」より、出典をご確認ください。</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\"><a href=\"https://disaportal.gsi.go.jp/hazardmap/copyright/kasen_kuni_newL1.html\" target=\"_blank\">データの掲載状況一覧（国管理河川）</a><br><a href=\"https://disaportal.gsi.go.jp/hazardmap/copyright/kasen_pref_newL1.html\" target=\"_blank\">データの掲載状況一覧（都道府県管理河川）</a><br><a href=\"https://disaportal.gsi.go.jp/hazardmap/copyright/copyright.html\" target=\"_blank\">データについて</a></div>"
+    },
+    {
+      "type": "Layer",
+      "id": "01_flood_l2_keizoku_data",
+      "title": "浸水継続時間（想定最大規模）",
+      "url": "https://disaportaldata.gsi.go.jp/raster/01_flood_l2_keizoku_data/{z}/{x}/{y}.png",
+      "cocotile": true,
+      "minZoom": 2,
+      "maxZoom": 17,
+      "html": "<div class=\"gsi_layerinfo_title\">浸水継続時間（想定最大規模）</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">氾濫水到達後、浸水深 が0.5ｍに達してからその浸水深を下回るまでの時間</div>      <div style=\"font-weight:bold;\">凡例</div><div style=\"border-bottom:1px dotted #2c6983;\"><img src=\"https://disaportal.gsi.go.jp/maps/image/legend/shinsui_legend_l2_keizoku.png\" alt=\"凡例\"></div><div style=\"font-weight:bold;\">注意点</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">このシミュレーションの実施にあたっては、支川の氾濫、シミュレーションの前提となる降雨を超える規模の降雨、高潮及び内水による氾濫等を考慮していませんので、想定される浸水継続時間が実際の浸水継続時間と異なる場合や、浸水継続時間が明示されていない区域においても浸水が発生する場合があります。</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\"><a href=\"https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/kasen_kuni_keizoku.htmll\" target=\"_blank\">データの掲載状況一覧（国管理河川）</a><br><a href=\"https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/kasen_pref_keizoku.html\" target=\"_blank\">データの掲載状況一覧（都道府県管理河川）</a><br><a href=\"https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/copyright_data.html\" target=\"_blank\">データについて</a></div>"
+    },
+    {
+      "type": "Layer",
+      "id": "01_flood_l2_kaokutoukai_hanran_data",
+      "title": "家屋倒壊等氾濫想定区域（氾濫流）",
+      "url": "https://disaportaldata.gsi.go.jp/raster/01_flood_l2_kaokutoukai_hanran_data/{z}/{x}/{y}.png",
+      "cocotile": true,
+      "minZoom": 2,
+      "maxZoom": 17,
+      "html": "<div class=\"gsi_layerinfo_title\">家屋倒壊等氾濫想定区域（氾濫流）</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">家屋の流失・倒壊をもたらすような洪水の氾濫流が発生するおそれがある範囲</div><div style=\"font-weight:bold;\">凡例</div><div style=\"border-bottom:1px dotted #2c6983;\"><img src=\"https://disaportal.gsi.go.jp/maps/image/legend/kaokutoukai_hanran.png\" alt=\"凡例\"></div><div style=\"font-weight:bold;\">注意点</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">家屋倒壊等氾濫想定区域（氾濫流）は、一定の仮定を与えて算定しており、倒壊等する家屋は直接基礎の標準的な木造家屋を想定していることと、堤防の宅地側には家屋がない更地の状態で氾濫計算をしていることから、この区域の境界は厳密ではなく、家屋の倒壊・流出等の危険性がある区域の目安を示すものとなっています。</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\"><a href=\"https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/copyright_data.html\" target=\"_blank\">データについて</a></div>"
+    },
+    {
+      "type": "Layer",
+      "id": "01_flood_l2_kaokutoukai_kagan_data",
+      "title": "家屋倒壊等氾濫想定区域（河岸侵食）",
+      "url": "https://disaportaldata.gsi.go.jp/raster/01_flood_l2_kaokutoukai_kagan_data/{z}/{x}/{y}.png",
+      "cocotile": true,
+      "minZoom": 2,
+      "maxZoom": 17,
+      "html": "<div class=\"gsi_layerinfo_title\">家屋倒壊等氾濫想定区域（河岸侵食）</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">家屋の流失・倒壊をもたらすような洪水時の河岸侵食が発生するおそれがある範囲</div><div style=\"font-weight:bold;\">凡例</div><div style=\"border-bottom:1px dotted #2c6983;\"><img src=\"https://disaportal.gsi.go.jp/maps/image/legend/kaokutoukai_hanran.png\" alt=\"凡例\"></div><div style=\"font-weight:bold;\">注意点</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">家屋倒壊等氾濫想定区域（河岸侵食）は、河川の河岸が侵食された場合における、家屋の倒壊・流出等の危険性がある区域の目安を示すものですが、個々の家屋の構造・強度特性等の違いから、この区域の境界は厳密ではなく、区域の目安を示すものとなっています。</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\"><a href=\"https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/copyright_data.html\" target=\"_blank\">データについて</a></div>"
+    },
+    {
+      "type": "Layer",
+      "id": "02_naisui_data",
+      "title": "内水（雨水出水）浸水想定区域",
+      "url": "https://disaportaldata.gsi.go.jp/raster/02_naisui_data/{z}/{x}/{y}.png",
+      "cocotile": true,
+      "minZoom": 2,
+      "maxZoom": 17,
+      "html": "<div class=\"gsi_layerinfo_title\">内水（雨水出水）浸水想定区域</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">下水道に雨水を排除できないこと又は下水道から河川等に雨水を排除できないことにより浸水が想定される区域と水深（想定し得る最大規模の降雨）</div><div style=\"font-weight:bold;\">凡例</div><div style=\"border-bottom:1px dotted #2c6983;\"><img src=\"https://disaportal.gsi.go.jp/maps/image/legend/naisui_legend.png\" alt=\"凡例\"></div><div style=\"font-weight:bold;\">注意点</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\">この図は、水防法の規定により定められた想定最大規模降雨による雨水出水浸水想定区域及び浸水した場合に想定される水深を表示した図面です。このシミュレーションにあたっては、河川の氾濫による浸水及び高潮等による浸水は考慮していません。想定される水深が実際の浸水深と異なる場合があります。また、重ねるハザードマップでは、全国の自治体の内水浸水想定区域データを統一的な基準で表示するため、「浸水深0m - 浸水深0.1 mの範囲」は表示しておりません。</div><div class=\"gsi_layerinfo_kaisetu\" style=\"border-bottom:1px dotted #2c6983;\"><a href=\"https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/copyright_data.html\" target=\"_blank\">データについて</a></div>"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "layers": [
+    {
+      "type": "LayerGroup",
+      "title": "津波",
+      "iconUrl": "./image/system/folder_new.png",
+      "toggleall": false,
+      "src": "./layers_disaportal_tsunami.txt"
+    }
+  ]
+}

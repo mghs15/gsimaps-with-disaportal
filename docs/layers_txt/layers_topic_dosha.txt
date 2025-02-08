@@ -1,0 +1,11 @@
+{
+  "layers": [
+    {
+      "type": "LayerGroup",
+      "title": "土砂災害",
+      "iconUrl": "./image/system/folder_new.png",
+      "toggleall": false,
+      "src": "./layers_disaportal_dosha.txt"
+    }
+  ]
+}
