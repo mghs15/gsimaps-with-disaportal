@@ -52137,6 +52137,23 @@ GSI.GSIMaps = L.Evented.extend({
 
         break;
 
+      // 拡張
+      case 'riskmatomete':
+        // リスク検索　ダイアログ
+        if (!this._riskmatometeDialog)
+          this._riskmatometeDialog = new GSI.RiskMatometeDialog(
+            dialogManager,
+            map,
+            {
+              width: 350, left: windowSize.w - 370, top: 45,
+              effect: CONFIG.EFFECTS.DIALOG,
+              resizable: (GSI.Utils.Browser.isSmartMobile ? false : "all")
+            }
+          );
+        this._riskmatometeDialog.show();
+
+        break;
+        
       case 'comparisonmap':
         this.comparison(!this.compared());
         break;
@@ -52490,6 +52507,8 @@ $(document).ready(function () {
       GSI.GLOBALS.gsimaps = new GSI.GSIMaps();
       GSI.GLOBALS.gsimaps.on("initialized", function () {
         // 表示の準備が出来た後に処理を行いたい場合はここに記述
+        // 拡張
+        disaportal();
       });
 
     });

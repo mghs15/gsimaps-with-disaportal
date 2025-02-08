@@ -170,6 +170,12 @@ CONFIG.UI.MENU = [
     buttonWidth : "64px",
     children : [
       {
+        id : "riskmatomete",
+        title : "リスク検索",
+        icon : "./image/system/tool/tool-sonota.png",
+        description : "災害リスク情報をまとめて検索できます"
+      },
+      {
         id : "sakuzu",
         title : "作図・ﾌｧｲﾙ",
         description : "点、線、面などを作図できます",
