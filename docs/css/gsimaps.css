@@ -187,7 +187,7 @@ form {
 	/*for IE*/
 	text-decoration: none;
 	font-size: 9.5pt;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -544,7 +544,7 @@ form {
 	line-height: 28px;
 	vertical-align: middle;
 	background-color: lemonchiffon; // #fff;
-	border: 2px solid orange; // #0055AD;
+	border: 2px solid orange; // #0066BE;
 	/* background-image: url(../image/system/info.png);
 	background-position: 4px 5px;
 	background-repeat: no-repeat;
@@ -609,7 +609,7 @@ form {
 	margin-top: 1px;
 	height: 30px;
 	line-height: 30px;
-	border: 2px solid #0055AD;
+	border: 2px solid #0066BE;
 	padding: 0px 0px 0px 28px;
 	width: 100%;
 	*width: 98%;
@@ -649,7 +649,7 @@ form {
 	background: -webkit-linear-gradient(top, #ccc, #fff);
 	background: linear-gradient(#ccc, #fff);
 	background: #fff;
-	border: 1px solid #0055AD;
+	border: 1px solid #0066BE;
 	cursor: pointer;
 	-moz-border-radius: 3px;
 	/*for Firefox*/
@@ -709,7 +709,7 @@ form {
 	font-size: 13px;
 	text-indent: 1em;
 	color: #FFFFFF;
-	border: 1px solid #0055AD;
+	border: 1px solid #0066BE;
 	cursor: pointer;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
@@ -869,10 +869,10 @@ form {
 	border-radius: 3px;
 	behavior: url(border-radius.htc);
 	/*for IE*/
-	box-shadow: 2px 2px 3px #0055AD;
-	-moz-box-shadow: 2px 2px 3px #0055AD;
+	box-shadow: 2px 2px 3px #0066BE;
+	-moz-box-shadow: 2px 2px 3px #0066BE;
 	/* Firefox */
-	-webkit-box-shadow: 2px 2px 3x #0055AD;
+	-webkit-box-shadow: 2px 2px 3x #0066BE;
 	;
 	/* Chrome, Safari */
 }
@@ -1057,9 +1057,9 @@ form {
 	border-radius: 3px;
 	behavior: url(border-radius.htc);
 	
-	box-shadow: 2px 2px 3px #0055AD;
-	-moz-box-shadow: 2px 2px 3px #0055AD;
-	-webkit-box-shadow: 2px 2px 3x #0055AD;
+	box-shadow: 2px 2px 3px #0066BE;
+	-moz-box-shadow: 2px 2px 3px #0066BE;
+	-webkit-box-shadow: 2px 2px 3x #0066BE;
 	
 	background-color:#fff;
 	
@@ -1103,7 +1103,7 @@ form {
 
 #list ul {
 	background-color: #fff;
-	color: #00316A;
+	color:#333;
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -1114,7 +1114,7 @@ form {
 }
 
 #list li a {
-	color: #00316A;
+	color:#333;
 	text-decoration: none;
 	display: block;
 	padding: 4px 0px 4px 4px;
@@ -1148,7 +1148,7 @@ form {
 #list li.icon {}
 
 #list li.folder a {
-	color: #00316A;
+	color:#333;
 	text-decoration: none;
 	background: url(../image/system/arrow_r.png) no-repeat right 50%;
 }
@@ -1202,9 +1202,9 @@ form {
 	border-radius: 3px;
 	behavior: url(border-radius.htc);
 	
-	box-shadow: 2px 2px 3px #0055AD;
-	-moz-box-shadow: 2px 2px 3px #0055AD;
-	-webkit-box-shadow: 2px 2px 3x #0055AD;
+	box-shadow: 2px 2px 3px #0066BE;
+	-moz-box-shadow: 2px 2px 3px #0066BE;
+	-webkit-box-shadow: 2px 2px 3x #0066BE;
 	
 	background-color:#fff;
 	
@@ -1248,7 +1248,7 @@ form {
 
 #visiblelist ul {
 	background-color: #fff;
-	color: #00316A;
+	color:#333;
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -1263,7 +1263,7 @@ form {
 }
 
 #visiblelist li a {
-	color: #00316A;
+	color:#333;
 	text-decoration: none;
 	display: block;
 	padding: 4px 0px 4px 4px;
@@ -1510,7 +1510,7 @@ form {
 	/*for IE*/
 	font-size: 90%;
 	padding: 1px 20px 1px 4px;
-	/*border: 2px solid #0055AD;*/
+	/*border: 2px solid #0066BE;*/
 	cursor: move;
 	position: relative;
 }
@@ -1605,7 +1605,7 @@ form {
 }
 
 .gsi_dialog_header.tab .closebtn {
-	color: #00316A;
+	color:#333;
 	top: 24px;
 	right: 1px;
 }
@@ -1770,7 +1770,7 @@ form {
 }
 
 .layertreedialog_ul {
-	color: #00316A;
+	color:#333;
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -2097,7 +2097,7 @@ form {
 	/*for IE*/
 	margin-right: 1px;
 	background: #A0CA5A;
-	color: #00316A;
+	color:#333;
 }
 
 .layertreedialog_ul li .info span.cocotile {
@@ -2257,7 +2257,7 @@ form {
 
 .layertreedialog_searchresult_frame a.closebtn {
 	vertical-align: bottom;
-	color: #00316A;
+	color:#333;
 	text-decoration: none;
 	position: absolute;
 	display: inline-block;
@@ -2358,7 +2358,7 @@ form {
 	height: 20px;
 	line-height: 20px;
 	text-align: center;
-	color: #00316A;
+	color:#333;
 	font-size: 12px;
 	white-space: nowrap;
 	text-decoration: none;
@@ -2403,7 +2403,7 @@ form {
 	*display: inline;
 	*zoom: 1;
 	text-decoration: none;
-	color: #00316A;
+	color:#333;
 	margin-left: -24px;
 	margin-bottom: -3px;
 	position: relative;
@@ -2552,7 +2552,7 @@ form {
 
 .layertreedialog_tab_frame a:active {
 	text-decoration: none;
-	color: #00316A;
+	color:#333;
 }
 
 .layertreedialog_tab_frame a.active {
@@ -2630,7 +2630,7 @@ form {
 }
 
 .viewlistdialog_ul {
-	color: #00316A;
+	color:#333;
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -2847,7 +2847,7 @@ form {
 }
 
 .viewlistdialog_ul li .opacity_up_btn {
-	color: #00316A;
+	color:#333;
 	position: absolute;
 	right: 70px;
 	top: 18px;
@@ -2884,7 +2884,7 @@ form {
 }
 
 .viewlistdialog_ul li .opacity_dn_btn {
-	color: #00316A;
+	color:#333;
 	position: absolute;
 	right: 48px;
 	top: 20px;
@@ -2942,7 +2942,7 @@ form {
 	border-radius: 3px;
 	background: #aaa;
 	text-decoration: none;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -3106,7 +3106,7 @@ form {
 	border-radius: 3px;
 	background: #aaa;
 	text-decoration: none;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -3637,7 +3637,7 @@ form {
 }
 
 .searchresultdialog_ul {
-	color: #00316A;
+	color:#333;
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -3690,7 +3690,7 @@ form {
     font-size: 13px;
     text-indent: 1em;
     color: #FFFFFF;
-    border: 1px solid #0055AD;
+    border: 1px solid #0066BE;
     cursor: pointer;
     
     
@@ -3738,7 +3738,7 @@ form {
 	/*for IE*/
 	text-decoration: none;
 	font-size: 9.5pt;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -3822,7 +3822,7 @@ form {
 	/*for IE*/
 	text-decoration: none;
 	font-size: 9.5pt;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -4788,7 +4788,7 @@ form {
 	left: 0px;
 	top: 0px;
 	background: #fff;
-	color: #00316A;
+	color:#333;
 	padding: 4px;
 	border: 1px solid #999;
 	-moz-border-radius: 8px;
@@ -4853,7 +4853,7 @@ form {
 }
 
 .gsi_modal_base_closebtn {
-	color: #00316A;
+	color:#333;
 	position: absolute;
 	right: 0px;
 	top: 0px;
@@ -5004,7 +5004,7 @@ form {
 	font-size: 150%;
 	text-align: center;
 	padding: 1px 20px 1px 4px;
-	/*border: 2px solid #0055AD;*/
+	/*border: 2px solid #0066BE;*/
 	cursor: move;
 }
 
@@ -5257,7 +5257,7 @@ form {
 	width: 5px;
 	margin: 0px;
 	background: #00316A;
-	border: 1px solid #0055AD;
+	border: 1px solid #0066BE;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
@@ -5922,7 +5922,7 @@ form {
 	/*for IE*/
 	text-decoration: none;
 	font-size: 9.5pt;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	border: 1px solid #ccc;
 	-moz-box-sizing: border-box;
@@ -6066,7 +6066,7 @@ form {
 	width: 5px;
 	margin: 0px;
 	background: #00316A;
-	border: 1px solid #0055AD;
+	border: 1px solid #0066BE;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
@@ -6277,7 +6277,7 @@ form {
 	vertical-align: middle;
 	text-decoration: none;
 	text-align: center;
-	color: #00316A;
+	color:#333;
 	font-size: 10px;
 	-moz-border-radius: 5px;
 	/*for Firefox*/
@@ -6292,7 +6292,7 @@ form {
 .help_window_frame_button:active
 {
 	background-color: #F9F6F2;
-	color:#00316A;
+	color:#333;
 }
 */
 
@@ -6319,7 +6319,7 @@ form {
 	white-space: nowrap;
 	font-size: 11pt;
 	background: #fff;
-	color: #00316A;
+	color:#333;
 	font-weight: bold;
 	border: 1px solid #00316A;
 	vertical-align: middle;
@@ -6458,7 +6458,7 @@ form {
 	behavior: url(border-radius.htc);
 	text-decoration: none;
 	line-height: 26px;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -6582,7 +6582,7 @@ form {
 	behavior: url(border-radius.htc);
 	text-decoration: none;
 	line-height: 26px;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -7074,7 +7074,7 @@ form {
 	behavior: url(border-radius.htc);
 	/*for IE*/
 	margin-right: 1px;
-	color: #00316A;
+	color:#333;
 	text-align: center;
 	border: 1px solid #eee;
 	padding: 2px;
@@ -7193,7 +7193,7 @@ form {
 	height: 24px;
 	line-height: 24px;
 	text-align: center;
-	color: #00316A;
+	color:#333;
 	text-decoration: none;
 }
 
@@ -7203,7 +7203,7 @@ form {
 	height: 24px;
 	line-height: 24px;
 	text-align: center;
-	color: #00316A;
+	color:#333;
 	text-decoration: none;
 }
 
@@ -7400,7 +7400,7 @@ form {
 	/*for IE*/
 	text-decoration: none;
 	font-size: 9.5pt;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -7430,13 +7430,13 @@ form {
 	/*for IE*/
 	font-size: 90%;
 	padding: 1px 20px 1px 4px;
-	/*border: 2px solid #0055AD;*/
+	/*border: 2px solid #0066BE;*/
 	cursor: move;
 }
 
 .gsi_crosssectionview_displaygraph_dialog_header .closebtn {
 	vertical-align: bottom;
-	color: #00316A;
+	color:#333;
 	text-decoration: none;
 	position: absolute;
 	display: inline-block;
@@ -7456,7 +7456,7 @@ form {
 
 .gsi_crosssectionview_displaygraph_dialog_header .minimizebtn {
 	vertical-align: bottom;
-	color: #00316A;
+	color:#333;
 	text-decoration: none;
 	position: absolute;
 	display: inline-block;
@@ -7737,7 +7737,7 @@ form {
 .gsi_spilitcontrol_container .normalbutton {
 	height: 28px;
 	line-height: 28px;
-	color: #00316A;
+	color:#333;
 	padding: 0 4px 0 4px;
 	vertical-align: middle;
 }
@@ -7908,7 +7908,7 @@ form {
 	/*for IE*/
 	text-decoration: none;
 	font-size: 9.5pt;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -7946,7 +7946,7 @@ form {
 	/*for IE*/
 	text-decoration: none;
 	font-size: 9.5pt;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -7984,7 +7984,7 @@ form {
 	/*for IE*/
 	text-decoration: none;
 	font-size: 9.5pt;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -8022,7 +8022,7 @@ form {
 	/*for IE*/
 	text-decoration: none;
 	font-size: 9.5pt;
-	color: #00316A;
+	color:#333;
 	vertical-align: middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -8136,7 +8136,7 @@ form {
 	height: 6px;
 	background: rgba(255, 255, 255, 0.9);
 	border-radius: 3px;
-	border: 1px solid #0055AD;
+	border: 1px solid #0066BE;
 }
 
 .gsi_csvdialog_content .progress {
@@ -8203,7 +8203,7 @@ form {
 	width: 80px;
 	top: 50%;
 	margin-top: -12px;
-	color: #00316A;
+	color:#333;
 	background: #fff;
 	display: block;
 	text-align: center;
@@ -8816,7 +8816,7 @@ form {
 
 .gsi-sakuzuinfoedit-dialog-header .closebtn {
 	vertical-align: bottom;
-	color: #00316A;
+	color:#333;
 	text-decoration: none;
 	position: absolute;
 	display: inline-block;
@@ -8836,7 +8836,7 @@ form {
 
 .gsi-sakuzuinfoedit-dialog-header .minimizebtn {
 	vertical-align: bottom;
-	color: #00316A;
+	color:#333;
 	text-decoration: none;
 	position: absolute;
 	display: inline-block;
@@ -9435,7 +9435,7 @@ overflow-y: auto;
 	behavior: url(border-radius.htc);/*for IE*/
 	text-decoration:none;
 	font-size:9.5pt;
-	color:#00316A;
+	color:#333;
 	vertical-align:middle;
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 1px 1px 2px 1px  rgba(0, 0, 0, 0.1); /* Firefox */
@@ -9618,7 +9618,7 @@ overflow-y: auto;
 	color:#eee;
 	font-weight: bold;
 	background-color: #2b7396;
-	border: 1px solid #0055AD;
+	border: 1px solid #0066BE;
 }
 
 .gsi-footer-container .item-frame .addr-ToActive:hover{
@@ -9743,7 +9743,7 @@ Menu
 
 
 .gsi-header-tool-icon:hover {
-  background-color:#0055AD;
+  background-color:#0066BE;
 }
 
 .gsi-menu-rightpanel {
@@ -9822,7 +9822,7 @@ Menu
 }
 
 .gsi-menu-rightpanel ul li a.image-only:hover{
-  background-color:#0055AD;
+  background-color:#0066BE;
 }
 
 .gsi-menu-rightpanel ul li div.title{
@@ -9991,7 +9991,7 @@ Menu
 
 
 .gsi-header-tool-help-icon:hover {
-  background-color:#0055AD;
+  background-color:#0066BE;
 }
 
 
@@ -10081,12 +10081,12 @@ Menu
 }
 
 .gsi-menu-popuppanel a:hover{
-  background-color:#0055AD;
+  background-color:#0066BE;
 }
 
 
 .gsi-menu-popuppanel  a.on{
-  background-color: #0055AD;
+  background-color: #0066BE;
 }
 
 .gsi-menu-popuppanel div.title{
@@ -10239,7 +10239,7 @@ MapMenu
 	padding: 2px;
 	cursor: pointer;
   border: 2px solid rgba(0,0,0,0.2);
-  background-color:rgba(51,51,51,0.8);
+  background-color:rgba(0, 49, 106,0.8);
   background-clip: padding-box;
 	font-size:110%;
 	text-decoration:none;
@@ -10400,7 +10400,7 @@ MapMenu
   -moz-box-sizing: border-box;
   color:#fff;
   padding:0;
-  background:rgb(51,51,51);
+  background:rgb(0, 49, 106);
   border-bottom:1px solid #bbb;
   line-height:26px;
   height:26px;
@@ -10692,7 +10692,7 @@ MapMenu
 	height:20px;
 	line-height:20px;
 	    text-align: center;
-	    color:#00316A;
+	    color:#333;
 	font-size:12px;
 	white-space:nowrap;
 	text-decoration:none;
