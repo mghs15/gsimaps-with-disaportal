@@ -1,0 +1,182 @@
+{
+  "layers": [
+    {
+      "type": "LayerGroup",
+      "title": "垂直写真（速報）",
+      "toggleall": false,
+      "entries": [
+        {
+          "type": "Layer",
+          "id": "20240923rain_wajima_0923suichoku_sokuho",
+          "title": "輪島地区（9/23撮影）",
+          "iconUrl": "https://maps.gsi.go.jp/portal/sys/v4/symbols/081.png",
+          "url": "https://maps.gsi.go.jp/xyz/20240923rain_wajima_0923suichoku_sokuho/{z}/{x}/{y}.geojson",
+          "minZoom": 2,
+          "maxZoom": 18,
+          "maxNativeZoom": 2,
+          "area": {
+            "lat": 37.417209,
+            "lng": 137.047920,
+            "zoom": 12
+          },
+          "html": "速報用写真のため、通常の航空カメラによる撮影画像より画質が低下しています。また、雲の影響により地上が見えにくい場合があります。<div class=\"gsi_layerinfo_copy\">(c)国土地理院</div>"
+        },
+        {
+          "type": "Layer",
+          "id": "20240923rain_wajima_0924suichoku_sokuho",
+          "title": "輪島地区（9/24撮影）",
+          "iconUrl": "https://maps.gsi.go.jp/portal/sys/v4/symbols/081.png",
+          "url": "https://maps.gsi.go.jp/xyz/20240923rain_wajima_0924suichoku_sokuho/{z}/{x}/{y}.geojson",
+          "minZoom": 2,
+          "maxZoom": 18,
+          "maxNativeZoom": 2,
+          "area": {
+            "lat": 37.417209,
+            "lng": 137.047920,
+            "zoom": 12
+          },
+          "html": "速報用写真のため、通常の航空カメラによる撮影画像より画質が低下しています。また、雲の影響により地上が見えにくい場合があります。<div class=\"gsi_layerinfo_copy\">(c)国土地理院</div>"
+        }
+      ]
+    },
+    {
+      "type": "LayerGroup",
+      "title": "正射画像（速報）",
+      "iconUrl": "",
+      "toggleall": false,
+      "entries": [
+        {
+          "type": "Layer",
+          "id": "20240923rain_wajima_0923do_sokuho",
+          "title": "輪島地区（9/23撮影）",
+          "url": "https://maps.gsi.go.jp/xyz/20240923rain_wajima_0923do_sokuho/{z}/{x}/{y}.png",
+          "cocotile": true,
+          "minZoom": 10,
+          "maxZoom": 18,
+          "area": {
+            "lat": 37.409301,
+            "lng": 137.010498,
+            "zoom": 12
+          },
+          "html": "写真から自動処理したものなので、構造物等の歪み、不連続等が発生している箇所があります。また、雲の影響により地上が見えにくい場合があります。<div class=\"gsi_layerinfo_copy\">(c)国土地理院</div>"
+        },
+        {
+          "type": "Layer",
+          "id": "20240923rain_wajimatobu_0924do_sokuho",
+          "title": "輪島東部地区（9/24撮影）",
+          "url": "https://maps.gsi.go.jp/xyz/20240923rain_wajimatobu_0924do_sokuho/{z}/{x}/{y}.png",
+          "cocotile": true,
+          "minZoom": 10,
+          "maxZoom": 18,
+          "area": {
+            "lat": 37.445153,
+            "lng": 137.063370,
+            "zoom": 12
+          },
+          "html": "写真から自動処理したものなので、構造物等の歪み、不連続等が発生している箇所があります。また、雲の影響により地上が見えにくい場合があります。<div class=\"gsi_layerinfo_copy\">(c)国土地理院</div>"
+        },
+        {
+          "type": "Layer",
+          "id": "20240923rain_wajimaseibu_0924do_sokuho",
+          "title": "輪島西部地区（9/24撮影）",
+          "url": "https://maps.gsi.go.jp/xyz/20240923rain_wajimaseibu_0924do_sokuho/{z}/{x}/{y}.png",
+          "cocotile": true,
+          "minZoom": 10,
+          "maxZoom": 18,
+          "area": {
+            "lat": 37.364427,
+            "lng": 136.837463,
+            "zoom": 12
+          },
+          "html": "写真から自動処理したものなので、構造物等の歪み、不連続等が発生している箇所があります。また、雲の影響により地上が見えにくい場合があります。<div class=\"gsi_layerinfo_copy\">(c)国土地理院</div>"
+        }
+      ]
+    },
+    {
+      "type": "LayerGroup",
+      "title": "斜め写真",
+      "toggleall": false,
+      "entries": [
+        {
+          "type": "Layer",
+          "id": "20240923rain_wajima_0923naname",
+          "title": "輪島地区（9/23撮影）",
+          "iconUrl": "https://maps.gsi.go.jp/portal/sys/v4/symbols/183.png",
+          "url": "https://maps.gsi.go.jp/xyz/20240923rain_wajima_0923naname/{z}/{x}/{y}.geojson",
+          "minZoom": 2,
+          "maxZoom": 18,
+          "maxNativeZoom": 2,
+          "area" : {
+            "lat" : 37.422253,
+            "lng" : 137.072296,
+            "zoom" : 12
+          },
+          "html": "<div class=\"gsi_layerinfo_title\">斜め写真（9/23撮影）</div><div class=\"gsi_layerinfo_kaisetu\">斜め写真の方向アイコンは、カメラのシャッターが押された位置に表示しています。アイコンの示す方向は、撮影方向の概略を示しております。また、雲の影響により地上が見えにくい場合があります。<div class=\"gsi_layerinfo_copy\">(c)国土地理院</div>"
+        },
+        {
+          "type": "Layer",
+          "id": "20240923rain_wajima_0924naname",
+          "title": "輪島地区（9/24撮影）",
+          "iconUrl": "https://maps.gsi.go.jp/portal/sys/v4/symbols/183.png",
+          "url": "https://maps.gsi.go.jp/xyz/20240923rain_wajima_0924naname/{z}/{x}/{y}.geojson",
+          "minZoom": 2,
+          "maxZoom": 18,
+          "maxNativeZoom": 2,
+          "area" : {
+            "lat" : 37.432068,
+            "lng" : 136.963806,
+            "zoom" : 12
+          },
+          "html": "<div class=\"gsi_layerinfo_title\">斜め写真（9/24撮影）</div><div class=\"gsi_layerinfo_kaisetu\">斜め写真の方向アイコンは、カメラのシャッターが押された位置に表示しています。アイコンの示す方向は、撮影方向の概略を示しております。また、雲の影響により地上が見えにくい場合があります。<div class=\"gsi_layerinfo_copy\">(c)国土地理院</div>"
+        }
+      ]
+    },
+    {
+      "type": "LayerGroup",
+      "title": "斜面崩壊・土石流・堆積分布データ",
+      "iconUrl": "",
+      "toggleall": false,
+      "entries": [
+       {
+         "type": "LayerGroup",
+         "title": "斜面崩壊・土石流・堆積分布データ",
+         "id": "20240923rain_syamenhoukai_dosekiryu_taiseki",
+         "toggleall": false,
+         "html": "</div><div style=\"text-align:center;\"><img src=\"https://maps.gsi.go.jp/legend/20240923rain_syamenhoukai_dosekiryu_taiseki_legend.png\" alt=\"凡例\"></div><div class=\"gsi_layerinfo_kaisetu\">１．この情報は、国土地理院が9月23日及び24日に撮影した空中写真（正射画像）を用いて、令和6年9月20日からの大雨によって生じたと考えられる斜面崩壊地、土石流範囲及び堆積箇所を判読したものです。<br>２．現地調査は実施していないことから、実際に崩壊等のあった箇所でも表示できていない箇所や、今回の大雨による崩壊地等以外の箇所を表示している場合があります。<br>３．斜面崩壊・土石流・堆積分布は、長さ又は幅がおおむね50m以上のものを表しています。<br>　令和6年9月25日13時作成</li></ul></div><div class=\"gsi_layerinfo_copy\">(c)国土地理院",
+         "entries": [
+           {
+             "type": "Layer",
+             "id": "20240923rain_syamenhoukai_dosekiryu_taiseki_all",
+             "title": "斜面崩壊・土石流・堆積範囲",
+             "url": "https://maps.gsi.go.jp/xyz/20240923rain_syamenhoukai_dosekiryu_taiseki_all/{z}/{x}/{y}.geojson",
+             "cocotile": true,
+             "minZoom": 2,
+             "maxZoom": 17,
+             "maxNativeZoom": 2
+           },
+           {
+             "type": "Layer",
+             "id": "20240923rain_cloud_poly",
+             "title": "雲による未判読範囲",
+             "url": "https://maps.gsi.go.jp/xyz/20240923rain_cloud_poly/{z}/{x}/{y}.geojson",
+             "cocotile": true,
+             "minZoom": 2,
+             "maxZoom": 17,
+             "maxNativeZoom": 2
+           },
+           {
+             "type": "Layer",
+             "id": "20240923rain_handoku_area",
+             "title": "判読範囲",
+             "url": "https://maps.gsi.go.jp/xyz/20240923rain_handoku_area/{z}/{x}/{y}.geojson",
+             "cocotile": true,
+             "minZoom": 2,
+             "maxZoom": 17,
+             "maxNativeZoom": 2
+           }
+         ]
+       }
+      ]
+    }
+  ]
+}
