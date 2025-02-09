@@ -1,4 +1,6 @@
 
+alert("本サイトは、国土地理院のサイトではありませんのでご注意ください。")
+
 const DISAPORTAL = {
   GLOBAL: {
     clickPointMarker: {},
@@ -158,7 +160,7 @@ const disaportal = () => {
             
             const parent = document.createElement('div');
             parent.appendChild(title);
-            canvas.style.border = `2px solid rgb(${risk.rgb[0]},${risk.rgb[1]},${risk.rgb[2]})` ;
+            canvas.style.border = `2px solid rgb(150,150,150)` ;
             parent.appendChild(canvas);
             parent.appendChild(div);
             
@@ -215,14 +217,41 @@ const disaportal = () => {
           console.log(mostDangerousRiskInfo);
           if(!mostDangerousRiskInfo.rank) return;
           
+          const addLayer = () => {
+            const _tmpUrl = new URL(window.location.href);
+            const _tmpHash = _tmpUrl.hash;
+            const _params = _tmpHash.split("&");
+            const _newParams = [];
+            
+            for(let i=0; i<_params.length; i++){
+              let param = "";
+              if(_params[i].match(/^ls=/)){
+                param = _params[i] + "%7C" + layerId;
+              }else if(_params[i].match(/^disp=/)){
+                param = _params[i] + "" + "1";
+              }else{
+                param = _params[i];
+              }
+              _newParams.push(param);
+            }
+            
+            const _newHash = _newParams.join("&");
+            const _newUrl = _tmpUrl.origin + "/" + _newHash;
+            console.log("新しく " + _newUrl + " へ遷移");
+            window.location.replace(_newUrl);
+          }
+          
           canvas.style.border = `2px solid rgb(${mostDangerousRiskInfo.rgb[0]},${mostDangerousRiskInfo.rgb[1]},${mostDangerousRiskInfo.rgb[2]})` ;
           canvas.style.width = "70px";
           canvas.style.height = "70px";
+          canvas.style.cursor = "pointer";
+          canvas.addEventListener('click', addLayer);
           imagesDiv.appendChild(canvas);
           
           console.log(layerId);
           const category = getCategoryFromLayerId(layerId);
           if(!category) return;
+          
           list += "<li>" + category + " " + mostDangerousRiskInfo.span + "</li>";
           
         });
@@ -237,6 +266,12 @@ const disaportal = () => {
         
         const parent = document.createElement('div');
         parent.appendChild(imagesDiv);
+        
+        const imageGuide = document.createElement('div');
+        imageGuide.innerHTML = "上記画像をクリックすると該当レイヤを追加します。";
+        imageGuide.style["font-size"] = "0.75em";
+        parent.appendChild(imageGuide);
+        
         parent.appendChild(document.createElement('hr'));
         parent.appendChild(desc);
 
