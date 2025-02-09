@@ -127,7 +127,7 @@ const disaportal = () => {
         const layerId = layers[i];
         const isVisible = +disp[i];
         if(isVisible && DISAPORTAL.CONGFIG.popupTargetLayers.includes(layerId)){
-          drawTileImages(lat, lng, zl, px, layerId).then( res =>{
+          drawTileImages(lat, lng, zl, px, layerId, "").then( res =>{
           
             console.log(res);
 
@@ -158,7 +158,7 @@ const disaportal = () => {
             
             const parent = document.createElement('div');
             parent.appendChild(title);
-            canvas.style.border = "1px solid #AAA";
+            canvas.style.border = `2px solid rgb(${risk.rgb[0]},${risk.rgb[1]},${risk.rgb[2]})` ;
             parent.appendChild(canvas);
             parent.appendChild(div);
             
@@ -183,9 +183,13 @@ const disaportal = () => {
       
       DISAPORTAL.CONGFIG.popupTargetLayers.forEach( layerId => {
         console.log(layerId);
-        const pm = drawTileImages(lat, lng, zl, px, layerId);
+        const pm = drawTileImages(lat, lng, zl, px, layerId, "");
         pmset.push(pm);
       });
+      
+      // 比較用に標準地図も読む
+      const pmStd = drawTileImages(lat, lng, zl, px, "std", "https://cyberjapandata.gsi.go.jp/xyz");
+      pmset.push(pmStd);
       
       Promise.all(pmset).then((values) => {
         console.log(values);
@@ -196,15 +200,29 @@ const disaportal = () => {
           const layerId = res.layerId;
           const canvas = res.canvas;
           const info = res.info
+          
+          // std の場合、canvas 追加のみで終了
+          if(layerId == "std"){
+            canvas.style.border = "2px solid #AAA";
+            canvas.style.width = "70px";
+            canvas.style.height = "70px";
+            imagesDiv.appendChild(canvas);
+            return;
+          }
+          
+          // 災害リスク情報は、ヒットがあれば canvas と説明文を追加
           const mostDangerousRiskInfo = info.sort((a, b) => b.rank - a.rank)[0];
           console.log(mostDangerousRiskInfo);
           if(!mostDangerousRiskInfo.rank) return;
           
-          canvas.style.border = "1px solid #AAA";
+          canvas.style.border = `2px solid rgb(${mostDangerousRiskInfo.rgb[0]},${mostDangerousRiskInfo.rgb[1]},${mostDangerousRiskInfo.rgb[2]})` ;
+          canvas.style.width = "70px";
+          canvas.style.height = "70px";
           imagesDiv.appendChild(canvas);
           
           console.log(layerId);
           const category = getCategoryFromLayerId(layerId);
+          if(!category) return;
           list += "<li>" + category + " " + mostDangerousRiskInfo.span + "</li>";
           
         });
@@ -368,7 +386,7 @@ const disaportal = () => {
     
   }
 
-  const drawTileImages = (lat, lng, zl, px, ds) => {
+  const drawTileImages = (lat, lng, zl, px, ds, root="") => {
     
     const tiles = getTileList(lat, lng, zl, px);
     console.log(tiles);
@@ -386,7 +404,8 @@ const disaportal = () => {
       const X = info.X;
       const Y = info.Y;
       const tilename = `${zl}-${X}-${Y}`;
-      const url = `https://disaportaldata.gsi.go.jp/raster/${tileId}/${zl}/${X}/${Y}.png`;
+      const urlRoot = root ? root : "https://disaportaldata.gsi.go.jp/raster";
+      const url = `${urlRoot}/${tileId}/${zl}/${X}/${Y}.png`;
       
       
       return {
