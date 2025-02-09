@@ -222,14 +222,44 @@ const disaportal = () => {
             console.log(_tmpUrl);
             const _tmpHash = _tmpUrl.hash;
             const _params = _tmpHash.split("&");
+            
+            // パラメータをデコード
+            const paramObj = {};
+            for(let i=0; i<_params.length; i++){
+              const [key, cont] = _params[i].split("=");
+              if(key == "ls") {
+                paramObj[key] = cont.split("%7C");
+              }else if(key == "disp"){ 
+                paramObj[key] = cont.split("");
+              }else{ 
+                paramObj[key] = cont;
+              }
+            }
+            
+            // 既存のレイヤをパラメータから削除
+            for(let i=0; i<paramObj.ls.length; i++){
+              if(paramObj.ls[i] == layerId){
+                paramObj.ls.splice(i, 1);
+                paramObj.disp.splice(i, 1);
+              }
+            }
+            // 新たに最上位に目的のレイヤを追加
+            paramObj.ls.push(layerId);
+            paramObj.disp.push("1");
+            
+            // 新たな ls 及び disp パラメータの生成
+            const newLs = "ls=" + paramObj.ls.join("%7C");
+            const newDisp = "disp=" + + paramObj.disp.join("");
+            
+            // ハッシュ部の再生成
             const _newParams = [];
             
             for(let i=0; i<_params.length; i++){
               let param = "";
               if(_params[i].match(/^ls=/)){
-                param = _params[i] + "%7C" + layerId;
-              }else if(_params[i].match(/^disp=/)){
-                param = _params[i] + "" + "1";
+                param = newLs;
+              }else if( _params[i].match(/^disp=/)){
+                param = newDisp;
               }else{
                 param = _params[i];
               }
@@ -237,6 +267,8 @@ const disaportal = () => {
             }
             
             const _newHash = _newParams.join("&");
+            
+            // URL の再生成と設定
             const _newUrl = _tmpUrl.origin + _tmpUrl.pathname + _newHash;
             console.log("新しく " + _newUrl + " へ遷移");
             window.location.replace(_newUrl);
