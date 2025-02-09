@@ -198,11 +198,13 @@ CONFIG.UI.MENU = [
               }
             ]
           },
+          /*
           {
             id : "gsiglobe",
             title : "Globe",
             icon : "./image/system/tool/tool-globe.png",
           },
+          */
           {
             id : CONFIG.PARAMETERNAMES.JIHOKULINE,
             typeA: 'check',

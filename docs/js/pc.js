@@ -231,12 +231,14 @@ CONFIG.UI.MENU = [
           }
         ]
       },
+      /*
       {
         id : "gsiglobe",
         title : "Globe",
         icon : "./image/system/tool/tool-globe.png",
         description : "土地の起伏を地球儀で3次元表示できます"
       },
+      */
       {
         id : "other",
         title : "その他",
