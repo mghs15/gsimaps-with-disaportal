@@ -245,6 +245,7 @@ const disaportal = () => {
           console.log(mostDangerousRiskInfo);
           if(!mostDangerousRiskInfo.rank) return;
           
+          // レイヤの追加用関数
           const addLayer = () => {
             const _tmpUrl = new URL(window.location.href);
             console.log(_tmpUrl);
@@ -259,25 +260,40 @@ const disaportal = () => {
                 paramObj[key] = cont.split("%7C");
               }else if(key == "disp"){ 
                 paramObj[key] = cont.split("");
+              }else if(key == "blend"){ 
+                paramObj[key] = cont.split("");
               }else{ 
                 paramObj[key] = cont;
               }
             }
             
+            // blend パラメータは存在しないことがあるので前処理
+            // なお、１番下のレイヤの乗算処理は効かない
+            if(!paramObj.blend){
+              const _tmpBlend = "0".repeat(paramObj.ls.length - 1);
+              paramObj.blend = _tmpBlend.split("");
+              _params.push("blend=" + _tmpBlend);
+            }
+            
             // 既存のレイヤをパラメータから削除
             for(let i=0; i<paramObj.ls.length; i++){
               if(paramObj.ls[i] == layerId){
+                console.log(i);
                 paramObj.ls.splice(i, 1);
                 paramObj.disp.splice(i, 1);
+                paramObj.blend.splice(i - 1, 1); 
               }
             }
+            
             // 新たに最上位に目的のレイヤを追加
             paramObj.ls.push(layerId);
             paramObj.disp.push("1");
+            paramObj.blend.push("0");
             
-            // 新たな ls 及び disp パラメータの生成
+            // 新たな ls, disp, blend パラメータの生成
             const newLs = "ls=" + paramObj.ls.join("%7C");
-            const newDisp = "disp=" + + paramObj.disp.join("");
+            const newDisp = "disp=" + paramObj.disp.join("");
+            const newBlend = "blend=" + paramObj.blend.join("");
             
             // ハッシュ部の再生成
             const _newParams = [];
@@ -286,8 +302,10 @@ const disaportal = () => {
               let param = "";
               if(_params[i].match(/^ls=/)){
                 param = newLs;
-              }else if( _params[i].match(/^disp=/)){
+              }else if(_params[i].match(/^disp=/)){
                 param = newDisp;
+              }else if(_params[i].match(/^blend=/)){
+                param = newBlend;
               }else{
                 param = _params[i];
               }
@@ -298,6 +316,7 @@ const disaportal = () => {
             
             // URL の再生成と設定
             const _newUrl = _tmpUrl.origin + _tmpUrl.pathname + _newHash;
+            console.log(_newHash);
             console.log("新しく " + _newUrl + " へ遷移");
             window.location.replace(_newUrl);
           }
@@ -307,6 +326,7 @@ const disaportal = () => {
           canvas.style.height = "70px";
           canvas.style.cursor = "pointer";
           canvas.addEventListener('click', addLayer);
+          canvas.title = layerId;
           imagesDiv.appendChild(canvas);
           
           console.log(layerId);
