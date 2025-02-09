@@ -219,6 +219,7 @@ const disaportal = () => {
           
           const addLayer = () => {
             const _tmpUrl = new URL(window.location.href);
+            console.log(_tmpUrl);
             const _tmpHash = _tmpUrl.hash;
             const _params = _tmpHash.split("&");
             const _newParams = [];
@@ -236,7 +237,7 @@ const disaportal = () => {
             }
             
             const _newHash = _newParams.join("&");
-            const _newUrl = _tmpUrl.origin + "/" + _newHash;
+            const _newUrl = _tmpUrl.origin + _tmpUrl.pathname + _newHash;
             console.log("新しく " + _newUrl + " へ遷移");
             window.location.replace(_newUrl);
           }
