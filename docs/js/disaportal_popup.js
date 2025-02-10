@@ -204,7 +204,9 @@ const disaportal = () => {
           
         }
       }
+      
     }else{
+    
       // リスクをまとめて検索モード
       // DISAPORTAL.CONGFIG.popupTargetLayersをすべてチェック
       console.log("リスクをまとめて検索");
@@ -223,8 +225,15 @@ const disaportal = () => {
       
       Promise.all(pmset).then((values) => {
         console.log(values);
+        
+        // 詳細表示用
         let list = "";
         const imagesDiv = document.createElement('div');
+        // 概要表示用
+        const riskInfo = {
+          shinsuiArray: []
+        };
+        
         values.forEach( res => {
           // ポップアップ処理
           const layerId = res.layerId;
@@ -321,6 +330,7 @@ const disaportal = () => {
             window.location.replace(_newUrl);
           }
           
+          // canvas の設定と追加
           canvas.style.border = `2px solid rgb(${mostDangerousRiskInfo.rgb[0]},${mostDangerousRiskInfo.rgb[1]},${mostDangerousRiskInfo.rgb[2]})` ;
           canvas.style.width = "70px";
           canvas.style.height = "70px";
@@ -329,39 +339,190 @@ const disaportal = () => {
           canvas.title = layerId;
           imagesDiv.appendChild(canvas);
           
+          // 災害種別を設定
           console.log(layerId);
           const category = getCategoryFromLayerId(layerId);
           if(!category) return;
           
+          // 詳細作成用
           list += "<li>" + category + " " + mostDangerousRiskInfo.span + "</li>";
+          
+          // 概要作成用 
+          if(layerId.match("kaokutoukai")){
+            riskInfo.kaokutoukai = true;
+          }else if(category == "洪水" || category == "内水" || category == "高潮"){
+            if(!riskInfo.shinsui || riskInfo.shinsui.rank < mostDangerousRiskInfo.rank){
+              riskInfo.shinsui = {
+                rank:mostDangerousRiskInfo.rank,
+                text:mostDangerousRiskInfo.description,
+                rgb:mostDangerousRiskInfo.rgb
+              }
+            }
+            if(!riskInfo.shinsuiArray.includes(category)){
+              riskInfo.shinsuiArray.push(category);
+            }
+          }else if(category == "津波"){
+            if(!riskInfo.tsunami || riskInfo.tsunami.rank < mostDangerousRiskInfo.rank){
+              riskInfo.tsunami = {
+                rank:mostDangerousRiskInfo.rank,
+                text:mostDangerousRiskInfo.description
+              }
+            }
+          }else if(category == "土砂"){
+            riskInfo.dosha = true;
+          }
           
         });
         
+        // 詳細表示用（detail）
         if(!list) list = "<li>リスク情報を検索できませんでした。</li>";
-        let html = "<div><span style='font-weight:bold;'>リスクをまとめて表示</span>";
+        let html = "<div>";
         html += "<ol>" + list + "</ol>";
-        html += "<strong>リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
+        html += "<strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong>"
+        html += "</div>";
         
         const desc = document.createElement('div');
         desc.innerHTML = html;
         
-        const parent = document.createElement('div');
-        parent.appendChild(imagesDiv);
+        const detailTitle = document.createElement('div');
+        detailTitle.innerHTML = "<div style='background-color:#00316A;color:#FFF;padding:2px;'>リスクをまとめて表示（詳細）</div>";
         
         const imageGuide = document.createElement('div');
         imageGuide.innerHTML = "上記画像をクリックすると該当レイヤを追加します。";
         imageGuide.style["font-size"] = "0.75em";
-        parent.appendChild(imageGuide);
         
-        parent.appendChild(document.createElement('hr'));
-        parent.appendChild(desc);
+        const detail = document.createElement('div');
+        detail.id = "disasiterPopupDetail";
+        
+        detail.appendChild(detailTitle); // タイトル
+        detail.appendChild(document.createElement('hr'));
+        detail.appendChild(imagesDiv); // 取得ピクセルの画像
+        detail.appendChild(imageGuide); // 画像の説明
+        detail.appendChild(document.createElement('hr'));
+        detail.appendChild(desc); // 取得した情報の内容
 
+        // 概要表示用（summary）
+        let html2 = "";
+        if(riskInfo.shinsui){
+          const [r, g, b] = riskInfo.shinsui.rgb;
+          html2 += `<div style="background-color:rgb(${r},${g},${b});margin:2px;">`
+               + "ここの周囲では、最悪の場合、"
+               + "<span style='font-weight:bold;'>" + riskInfo.shinsuiArray.join("、") + "</span>"
+               + "による浸水が発生して、"
+               + "その深さが" 
+               + "<span style='font-weight:bold;'>" + riskInfo.shinsui.text + "</span>"
+               + "になることが想定されています。"
+               + "</div>"
+        }
+        if(riskInfo.kaokutoukai){
+          html2 += `<div style="background-color:rgb(255,100,100);margin:2px;">`
+               + "また、ここの周囲は、河川からあふれた水の流れにより、"
+               + "木造住宅などが倒壊する危険性のある場所です。"
+               + "</div>"
+        }
+        if(riskInfo.dosha){
+          html2 += `<div style="background-color:rgb(255,100,100);margin:2px;">`
+               + "ここの周囲は、<span style='font-weight:bold;'>土砂災害</span>が発生した場合、"
+               + "住民等の生命または身体に危険が生ずるおそれがある場所です。"
+               + "</div>"
+        }
+        if(riskInfo.tsunami){
+          html2 += `<div style="background-color:rgb(255,100,100);margin:2px;">`
+               + "ここの周囲では、最悪の場合、"
+               + "<span style='font-weight:bold;'>" + "津波" + "</span>"
+               + "による浸水が発生して、"
+               + "その深さが" 
+               + "<span style='font-weight:bold;'>" + riskInfo.tsunami.text + "</span>"
+               + "になることが想定されています。"
+               + "</div>"
+        }
+        if(html2 == ""){
+          html2 += `<div style="margin:2px;">`
+               + "ここの周囲は、"
+               + "洪水・内水、高潮、土砂災害、津波による被害の危険性が想定されていない"
+               + "又は<span style='font-weight:bold;'>現時点では災害リスクに関するデータが未整備</span>の場所です"
+               + "</div>"
+        }
+        
+        html2 = "<div id='disasterPopupSummary'>"
+              + "<div style='background-color:#00316A;color:#FFF;padding:2px;'>リスクをまとめて表示（概要）</div>"
+              + html2
+              + "</div>";
+        html2 += "<div><strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
+
+        const summary = document.createElement('div');
+        summary.innerHTML = html2;
+        
+        // タブ用（tabs）
+        const tabs = document.createElement('div');
+        
+        const activeBgColor = "#FFFFFF"; 
+        const activeTextColor = "#000000";
+        const inactiveBgColor = "#00316A";
+        const inactiveTextColor = "#FFFFFF";
+          // "#0055AD" はホバー色なのでいったん採用見送り
+        
+        const btn1 = document.createElement('div');
+        btn1.innerText = "詳細";
+        btn1.style["background-color"] = inactiveBgColor;
+        btn1.style.color = inactiveTextColor;
+        btn1.style.display = "inline-block";
+        btn1.style.cursor = "pointer";
+        btn1.style.padding = "4px";
+        btn1.style.margin = "0px 0px 4px 4px";
+        btn1.style["border-radius"] = "0px 0px 4px 4px";
+        
+        const btn2 = document.createElement('div');
+        btn2.innerText = "概要";
+        btn2.style["background-color"] = activeBgColor;
+        btn2.style.color = activeTextColor;
+        btn2.style.display = "inline-block";
+        btn2.style.cursor = "pointer";
+        btn2.style.padding = "4px";
+        btn2.style.margin = "0px 0px 4px 4px";
+        btn2.style["border-radius"] = "0px 0px 4px 4px";
+        
+        btn1.addEventListener('click', ()=>{
+          btn2.style["background-color"] = inactiveBgColor;
+          btn2.style.color = inactiveTextColor;
+          summary.style.display = "none";
+          btn1.style["background-color"] = activeBgColor;
+          btn1.style.color = activeTextColor;
+          detail.style.display = "block";
+        });
+        
+        btn2.addEventListener('click', ()=>{
+          btn1.style["background-color"] = inactiveBgColor;
+          btn1.style.color = inactiveTextColor;
+          detail.style.display = "none";
+          btn2.style["background-color"] = activeBgColor;
+          btn2.style.color = activeTextColor;
+          summary.style.display = "block";
+        });
+        
+        tabs.appendChild(btn2);
+        tabs.appendChild(btn1);
+        tabs.style["border-top"] = `4px solid ${activeBgColor}`;
+        tabs.style["margin-top"] = "2px";
+        tabs.style["background-color"] = inactiveBgColor;
+        tabs.style["border-radius"] = "0px 0px 8px 8px";
+        
+        detail.style.display = "none"; // 最初は 詳細 は非表示
+        
+        const pop = document.createElement('div');
+        pop.style["border-top"] = `8px solid ${inactiveBgColor}`;
+        pop.style["border-radius"] = "8px 8px 0px 0px";
+        pop.appendChild(summary);
+        pop.appendChild(detail);
+        pop.appendChild(tabs);
+        
+        // ポップアップを地図に追加
         DISAPORTAL.GLOBAL.clickPointMarker = L.marker([lat, lng])
           .addTo(map)
-          .bindPopup(parent)
+          .bindPopup(pop)
           .openPopup();
         
-      });
+      }); // Promise.all おわり
       
     }
     
