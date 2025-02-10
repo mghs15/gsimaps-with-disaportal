@@ -240,11 +240,15 @@ const disaportal = () => {
           const canvas = res.canvas;
           const info = res.info
           
+          // canvas の共通設定
+          canvas.style.width = "64px";
+          canvas.style.height = "64px";
+          canvas.style["margin-left"] = "4px";
+          canvas.title = layerId;
+          
           // std の場合、canvas 追加のみで終了
           if(layerId == "std"){
             canvas.style.border = "2px solid #AAA";
-            canvas.style.width = "70px";
-            canvas.style.height = "70px";
             imagesDiv.appendChild(canvas);
             return;
           }
@@ -330,13 +334,10 @@ const disaportal = () => {
             window.location.replace(_newUrl);
           }
           
-          // canvas の設定と追加
+          // canvas の追加設定
           canvas.style.border = `2px solid rgb(${mostDangerousRiskInfo.rgb[0]},${mostDangerousRiskInfo.rgb[1]},${mostDangerousRiskInfo.rgb[2]})` ;
-          canvas.style.width = "70px";
-          canvas.style.height = "70px";
           canvas.style.cursor = "pointer";
           canvas.addEventListener('click', addLayer);
-          canvas.title = layerId;
           imagesDiv.appendChild(canvas);
           
           // 災害種別を設定
@@ -385,7 +386,7 @@ const disaportal = () => {
         desc.innerHTML = html;
         
         const detailTitle = document.createElement('div');
-        detailTitle.innerHTML = "<div style='background-color:#00316A;color:#FFF;padding:2px;'>リスクをまとめて表示（詳細）</div>";
+        detailTitle.innerHTML = "<div style='background-color:#00316A;color:#FFF;padding:2px;border-radius:4px 4px 0px 0px;''>リスクをまとめて表示（詳細）</div>";
         
         const imageGuide = document.createElement('div');
         imageGuide.innerHTML = "上記画像をクリックすると該当レイヤを追加します。";
@@ -445,7 +446,7 @@ const disaportal = () => {
         }
         
         html2 = "<div id='disasterPopupSummary'>"
-              + "<div style='background-color:#00316A;color:#FFF;padding:2px;'>リスクをまとめて表示（概要）</div>"
+              + "<div style='background-color:#00316A;color:#FFF;padding:2px;border-radius:4px 4px 0px 0px;'>リスクをまとめて表示（概要）</div>"
               + html2
               + "</div>";
         html2 += "<div><strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
@@ -470,7 +471,7 @@ const disaportal = () => {
         btn1.style.cursor = "pointer";
         btn1.style.padding = "4px";
         btn1.style.margin = "0px 0px 4px 4px";
-        btn1.style["border-radius"] = "0px 0px 4px 4px";
+        btn1.style["border-radius"] = "0px 0px 2px 2px";
         
         const btn2 = document.createElement('div');
         btn2.innerText = "概要";
@@ -480,7 +481,7 @@ const disaportal = () => {
         btn2.style.cursor = "pointer";
         btn2.style.padding = "4px";
         btn2.style.margin = "0px 0px 4px 4px";
-        btn2.style["border-radius"] = "0px 0px 4px 4px";
+        btn2.style["border-radius"] = "0px 0px 2px 2px";
         
         btn1.addEventListener('click', ()=>{
           btn2.style["background-color"] = inactiveBgColor;
@@ -505,13 +506,15 @@ const disaportal = () => {
         tabs.style["border-top"] = `4px solid ${activeBgColor}`;
         tabs.style["margin-top"] = "2px";
         tabs.style["background-color"] = inactiveBgColor;
-        tabs.style["border-radius"] = "0px 0px 8px 8px";
+        tabs.style["border-radius"] = "0px 0px 4px 4px";
         
         detail.style.display = "none"; // 最初は 詳細 は非表示
         
         const pop = document.createElement('div');
-        pop.style["border-top"] = `8px solid ${inactiveBgColor}`;
-        pop.style["border-radius"] = "8px 8px 0px 0px";
+        pop.style.border = `3px solid ${inactiveBgColor}`;
+        pop.style["border-radius"] = "8px";
+        pop.style.padding = "1px";
+        
         pop.appendChild(summary);
         pop.appendChild(detail);
         pop.appendChild(tabs);
