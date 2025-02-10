@@ -289,19 +289,25 @@ const disaportal = () => {
             }
             
             // 既存のレイヤをパラメータから削除
-            for(let i=0; i<paramObj.ls.length; i++){
+            let tmpLayerOrder = 0;
+            const tmpLayerLength = paramObj.ls.length;
+            for(let i=0; i<tmpLayerLength; i++){
               if(paramObj.ls[i] == layerId){
                 console.log(i);
                 paramObj.ls.splice(i, 1);
                 paramObj.disp.splice(i, 1);
                 paramObj.blend.splice(i - 1, 1); 
+                tmpLayerOrder = i;
               }
             }
             
             // 新たに最上位に目的のレイヤを追加
-            paramObj.ls.push(layerId);
-            paramObj.disp.push("1");
-            paramObj.blend.push("0");
+            // ※もともと最上位の場合は削除する
+            if(tmpLayerOrder < tmpLayerLength - 1){
+              paramObj.ls.push(layerId);
+              paramObj.disp.push("1");
+              paramObj.blend.push("0");
+            }
             
             // 新たな ls, disp, blend パラメータの生成
             const newLs = "ls=" + paramObj.ls.join("%7C");
@@ -389,7 +395,7 @@ const disaportal = () => {
         detailTitle.innerHTML = "<div style='background-color:#00316A;color:#FFF;padding:2px;border-radius:4px 4px 0px 0px;''>リスクをまとめて表示（詳細）</div>";
         
         const imageGuide = document.createElement('div');
-        imageGuide.innerHTML = "上記画像をクリックすると該当レイヤを追加します。";
+        imageGuide.innerHTML = "上記画像をクリックすると該当レイヤを追加します。もし該当レイヤが既に最上位に表示されている場合、削除します。";
         imageGuide.style["font-size"] = "0.75em";
         
         const detail = document.createElement('div');
