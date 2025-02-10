@@ -100,13 +100,28 @@ const getCategoryFromLayerId = (layerId) => {
 
 const disaportal = () => {
   
+  console.log(GSI);
   const gsimaps = GSI.GLOBALS.gsimaps;
   console.log(gsimaps);
   const map = gsimaps._mainMap._map;
   console.log(map);
   
+  // クリック時イベント設定
   map.on('click', (e) => {
-    
+    getRisk(e);
+  });
+  
+  // クエリパラメータを利用した初回表示時のイベント
+  if(window.location.search.match("rkm=1")){
+    gsimaps._onMenuItemClick({item:{id:'riskmatomete'}});
+    setTimeout(() => {
+      const c = { latlng: map.getCenter() };
+      console.log(c);
+      getRisk(c);
+    }, 1);
+  }
+  
+  const getRisk = (e) => {
     // 作図中は反応させない
     console.log(gsimaps);
     if(gsimaps._sakuzuDialog && gsimaps._sakuzuDialog.getVisible()) {
@@ -124,7 +139,7 @@ const disaportal = () => {
     }
     
     // クリック地点の経緯度
-    console.log(e);
+    //console.log(e);
     const lng = e.latlng.lng;
     const lat = e.latlng.lat;
     
@@ -142,9 +157,9 @@ const disaportal = () => {
     const _disp = _hash.split("&").filter( x => x.match("disp="));
     const disp = _disp[0].replace("disp=", "").split("").reverse(); // 表示順に合わせる
     
-    console.log(_ls);
-    console.log(layers);
-    console.log(disp);
+    //console.log(_ls);
+    //console.log(layers);
+    //console.log(disp);
     
     // ポップアップの取得対象の設定
     const px = DISAPORTAL.GLOBAL.riskGetRange;
@@ -289,7 +304,7 @@ const disaportal = () => {
             }
             
             // 既存のレイヤをパラメータから削除
-            let tmpLayerOrder = 0;
+            let tmpLayerOrder = -1;
             const tmpLayerLength = paramObj.ls.length;
             for(let i=0; i<tmpLayerLength; i++){
               if(paramObj.ls[i] == layerId){
@@ -334,7 +349,7 @@ const disaportal = () => {
             const _newHash = _newParams.join("&");
             
             // URL の再生成と設定
-            const _newUrl = _tmpUrl.origin + _tmpUrl.pathname + _newHash;
+            const _newUrl = _tmpUrl.origin + _tmpUrl.pathname + _tmpUrl.search + _newHash;
             console.log(_newHash);
             console.log("新しく " + _newUrl + " へ遷移");
             window.location.replace(_newUrl);
@@ -540,8 +555,7 @@ const disaportal = () => {
       }); // Promise.all おわり
       
     }
-    
-  });
+  } // getRisk() おわり
 
   /*************************************************/
   /*タイル読み込み関係設定                      */
@@ -933,3 +947,5 @@ GSI.RiskMatometeDialog = GSI.Dialog.extend({
     return this.frame;
   }
 });
+
+
