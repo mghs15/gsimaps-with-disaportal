@@ -472,7 +472,7 @@ const disaportal = () => {
           // "#0055AD" はホバー色なのでいったん採用見送り
         
         const btn1 = document.createElement('a');
-        btn1.href = "javacsript:void(0)";
+        btn1.href = "javascript:void(0);";
         btn1.innerText = "詳細";
         btn1.style["background-color"] = inactiveBgColor;
         btn1.style.color = inactiveTextColor;
@@ -484,13 +484,13 @@ const disaportal = () => {
         btn1.style["border-radius"] = "0px 0px 2px 2px";
         
         const btn2 = document.createElement('a');
-        btn2.href = "javacsript:void(0)";
+        btn2.href = "javascript:void(0);";
         btn2.innerText = "概要";
         btn2.style["background-color"] = activeBgColor;
         btn2.style.color = activeTextColor;
         btn2.style.display = "inline-block";
         btn2.style.cursor = "pointer";
-        btn1.style["text-decoration"] = "none";
+        btn2.style["text-decoration"] = "none";
         btn2.style.padding = "4px";
         btn2.style.margin = "0px 0px 4px 4px";
         btn2.style["border-radius"] = "0px 0px 2px 2px";
