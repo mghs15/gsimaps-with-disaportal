@@ -84,6 +84,8 @@ const DISAPORTAL = {
       "05_jisuberikeikaikuiki": disasterPopupTable.dosha,
       //"05_nadarekikenkasyo": [],
     }
+  },
+  Utils: {
   }
 }
 
@@ -114,8 +116,6 @@ const disaportal = () => {
   const queryString = window.location.search.substring(1);
   const queryParams = new URLSearchParams(queryString);
   
-  console.log(queryParams);
-  
   // クエリパラメータを利用した初回表示時のイベント
   if(queryParams.get("rkm") == "1"){
     gsimaps._onMenuItemClick({item:{id:'riskmatomete'}});
@@ -141,50 +141,12 @@ const disaportal = () => {
     const targetNode = document.querySelector(".searchresultdialog_ul");
     const config = { attributes: true, childList: true, subtree: true };
     const callback = (mutationList, observer) => {
-      
       console.log("住所検索結果リストの変更を検知");
-      
       const aqs = document.querySelectorAll(".searchresultdialog_ul li a");
-      const addrs = gsimaps._searchDialog.chimeiResult
-      for(let i=0; i<aqs.length; i++){
-        //console.log(aqs[i]);
-        
-        const func = () => {
-          if(!DISAPORTAL.GLOBAL.isRiskMatometeMode) return;
-          
-          const title = aqs[i].querySelector("div.title").innerText;
-          const coords = addrs[i].geometry.coordinates;
-          const lnglat = {latlng: { lng: coords[0], lat: coords[1] }};
-          console.log("ADDRTEST:クリックイベント");
-          
-          const tmpMarkerLatLng = DISAPORTAL.GLOBAL.clickPointMarker._latlng;
-          //console.log([tmpMarkerLatLng,lnglat]);
-          
-          /***
-           * 目的の変更以外の変更も検知して関数が追加されてしまうため、
-           * 既存のマーカーを見て、場所の変化があるのか確認する
-          ***/
-          
-          if(tmpMarkerLatLng 
-            && Math.abs(tmpMarkerLatLng.lng - lnglat.latlng.lng) < 0.0001
-            && Math.abs(tmpMarkerLatLng.lat - lnglat.latlng.lat) < 0.0001
-          ){
-            console.log("ADDRTEST:リスク取得をスキップ")
-            return;
-          }
-          
-          getRisk(lnglat, title);
-          
-        }
-        
-        aqs[i].addEventListener('click', func);
-      }
-      
       const evClick = new Event('click');
       aqs[0].dispatchEvent(evClick);
-      
+      // リスク検索の処理自体は、gsimaps.js 内に直接追加
     };
-    
     const observer = new MutationObserver(callback);
     observer.observe(targetNode, config);
     
@@ -637,6 +599,8 @@ const disaportal = () => {
       
     }
   } // getRisk() おわり
+  
+  DISAPORTAL.Utils.getRisk = getRisk;
 
   /*************************************************/
   /*タイル読み込み関係設定                      */

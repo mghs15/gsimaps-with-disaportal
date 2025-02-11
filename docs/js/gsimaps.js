@@ -4562,6 +4562,14 @@ GSI.SearchResultDialog = GSI.Dialog.extend({
       }
 
       this.map.setView([latitude, longitude], zoom);
+      
+      // 拡張
+      console.log("住所検索結果の選択を gsimaps の 拡張部分から呼び出し")
+      console.log(resultItem)
+      DISAPORTAL.Utils.getRisk({
+        latlng: { lat: latitude, lng: longitude }
+      }, resultItem.properties.title);
+      
     }
 
   },
