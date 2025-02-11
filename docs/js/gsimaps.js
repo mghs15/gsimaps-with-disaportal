@@ -4542,6 +4542,18 @@ GSI.SearchResultDialog = GSI.Dialog.extend({
     });
     this.setTitle('検索結果:' + num + '件中' + viewNum + '件表示');
     this.markerList.addTo(this.map);
+    
+    // 拡張
+    if(DISAPORTAL.GLOBAL.isRiskMatometeMode){
+      console.log(results);
+      const resultItem = results[0][0] || results[1][0];
+      if(!resultItem) return;
+      const co = resultItem.geometry.coordinates;
+      DISAPORTAL.Utils.getRisk({
+        latlng: { lat: co[1], lng: co[0] }
+      }, resultItem.properties.title);
+    }
+    
   },
   onResultClick: function (resultItem) {
     this._setActiveItem(null);
@@ -4564,12 +4576,13 @@ GSI.SearchResultDialog = GSI.Dialog.extend({
       this.map.setView([latitude, longitude], zoom);
       
       // 拡張
-      console.log("住所検索結果の選択を gsimaps の 拡張部分から呼び出し")
-      console.log(resultItem)
-      DISAPORTAL.Utils.getRisk({
-        latlng: { lat: latitude, lng: longitude }
-      }, resultItem.properties.title);
-      
+      if(DISAPORTAL.GLOBAL.isRiskMatometeMode){
+        console.log("住所検索結果の選択を gsimaps の 拡張部分から呼び出し")
+        console.log(resultItem)
+        DISAPORTAL.Utils.getRisk({
+          latlng: { lat: latitude, lng: longitude }
+        }, resultItem.properties.title);
+      }
     }
 
   },

@@ -137,18 +137,7 @@ const disaportal = () => {
     const evSubmit = new Event('submit');
     form.dispatchEvent(evSubmit);
     
-    // 変更の監視
-    const targetNode = document.querySelector(".searchresultdialog_ul");
-    const config = { attributes: true, childList: true, subtree: true };
-    const callback = (mutationList, observer) => {
-      console.log("住所検索結果リストの変更を検知");
-      const aqs = document.querySelectorAll(".searchresultdialog_ul li a");
-      const evClick = new Event('click');
-      aqs[0].dispatchEvent(evClick);
-      // リスク検索の処理自体は、gsimaps.js 内に直接追加
-    };
-    const observer = new MutationObserver(callback);
-    observer.observe(targetNode, config);
+    // これ以降の処理は、gsimaps.js 内に直接追加
     
   }
   
@@ -242,10 +231,31 @@ const disaportal = () => {
             parent.appendChild(canvas);
             parent.appendChild(div);
             
-            DISAPORTAL.GLOBAL.clickPointMarker = L.marker([lat, lng])
-              .addTo(map)
-              .bindPopup(parent)
-              .openPopup();
+            getAddress(e)
+            .then( p => {
+              console.log(p);
+              
+              let addr = "住所は取得できませんでした";
+              if(p.muni){
+                const wurl = "https://disaportal.gsi.go.jp/hazardmap/index.html?citycode=" + p["行政コード"];
+                addr = `<a href="${wurl}" target="_blank">${p.pref} ${p.muni}</a> ${p.LV01} 付近`;
+              }
+              
+              const wa = document.createElement('div');
+              wa.innerHTML = "<hr>" + addr;
+              
+              parent.appendChild(wa);
+              
+              // 既存のポップアップ用アイコンは削除
+              if(DISAPORTAL.GLOBAL.clickPointMarker){
+                map.removeLayer(DISAPORTAL.GLOBAL.clickPointMarker);
+              }
+              DISAPORTAL.GLOBAL.clickPointMarker = L.marker([lat, lng])
+                .addTo(map)
+                .bindPopup(parent)
+                .openPopup();
+            
+            });
           
           });
           
@@ -581,19 +591,36 @@ const disaportal = () => {
         pop.style["border-radius"] = "8px";
         pop.style.padding = "1px";
         
-        pop.appendChild(summary);
-        pop.appendChild(detail);
-        pop.appendChild(tabs);
         
-        // ポップアップを地図に追加
-        // 既存のポップアップ用アイコンは削除
-        if(DISAPORTAL.GLOBAL.clickPointMarker){
-          map.removeLayer(DISAPORTAL.GLOBAL.clickPointMarker);
-        }
-        DISAPORTAL.GLOBAL.clickPointMarker = L.marker([lat, lng])
-          .addTo(map)
-          .bindPopup(pop)
-          .openPopup();
+        getAddress(e)
+        .then( p => {
+          console.log(p);
+          
+          let addr = "住所は取得できませんでした";
+          if(p.muni){
+            const wurl = "https://disaportal.gsi.go.jp/hazardmap/index.html?citycode=" + p["行政コード"];
+            addr = `<a href="${wurl}" target="_blank">${p.pref} ${p.muni}</a> ${p.LV01} 付近`;
+          }
+          
+          const wa = document.createElement('div');
+          wa.innerHTML = "<hr>" + addr;
+          
+          pop.appendChild(summary);
+          pop.appendChild(detail);
+          pop.appendChild(wa);
+          pop.appendChild(tabs);
+        
+          // ポップアップを地図に追加
+          // 既存のポップアップ用アイコンは削除
+          if(DISAPORTAL.GLOBAL.clickPointMarker){
+            map.removeLayer(DISAPORTAL.GLOBAL.clickPointMarker);
+          }
+          DISAPORTAL.GLOBAL.clickPointMarker = L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup(pop)
+            .openPopup();
+        
+        });
         
       }); // Promise.all おわり
       
@@ -602,6 +629,109 @@ const disaportal = () => {
   
   DISAPORTAL.Utils.getRisk = getRisk;
 
+  /*************************************************/
+  /*住所取得関係設定                      */
+  /*************************************************/
+  // Reference: GSI Vector
+  // GSIBV.Map.Util.AddrLoader https://maps.gsi.go.jp/vector/js/src/map/util.js
+  // たぶんWinding Number Algorithm
+  // 参考：https://www.nttpc.co.jp/technology/number_algorithm.html
+  const isPointInPolygon = (point, polygon) => {
+    let wn = 0;
+
+    for (let i = 0; i < polygon.length - 1; i++) {
+      if ((polygon[i][1] <= point[1]) && (polygon[i + 1][1] > point[1])) {
+        const vt = (point[1] - polygon[i][1]) / (polygon[i + 1][1] - polygon[i][1]);
+        if (point[0] < (polygon[i][0] + (vt * (polygon[i + 1][0] - polygon[i][0])))) {
+
+          ++wn;
+
+        }
+      }
+      else if ((polygon[i][1] > point[1]) && (polygon[i + 1][1] <= point[1])) {
+        const vt = (point[1] - polygon[i][1]) / (polygon[i + 1][1] - polygon[i][1]);
+        if (point[0] < (polygon[i][0] + (vt * (polygon[i + 1][0] - polygon[i][0])))) {
+
+          --wn;
+
+        }
+      }
+    }
+    return (wn != 0);
+    
+  }
+
+  const getGeoJsonPolygonInfo = ( url, pos ) => {
+    
+    return fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      
+      let hitFeature = null;
+      if (data && data.features) {
+        const targetPos = [pos.lng, pos.lat];
+        for (let i = 0; i < data.features.length; i++) {
+          const feature = data.features[i];
+          if (!feature.geometry || !feature.geometry.coordinates) continue;
+
+          let coords = feature.geometry.coordinates;
+          if (feature.geometry.type != "MultiPolygon") {
+            coords = [coords];
+          }
+          
+          for (let j = 0; j < coords.length; j++) {
+            let ret = null;
+            ret = isPointInPolygon(targetPos, coords[j][0]);
+            if (ret) {
+              for (let k = 1; k < coords[j].length; k++) {
+                // くりぬきポリゴン内なら×
+                const ret2 = isPointInPolygon(targetPos, coords[j][k]);
+                if (ret2) {
+                  ret = false;
+                  break;
+                }
+              }
+              if (ret) {
+                hitFeature = feature;
+                break;
+              }
+            }
+          }
+          if (hitFeature) break;
+        }
+      }
+      
+      return hitFeature;
+      
+    })
+
+  }
+  
+  const getAddress = (e) => {
+    
+    const cn = e.latlng;
+    
+    const x = lon2tile(cn.lng, 14);
+    const y = lat2tile(cn.lat, 14);
+    
+    const url = `https://cyberjapandata.gsi.go.jp/xyz/lv01_plg/14/${x}/${y}.geojson`;
+    
+    return getGeoJsonPolygonInfo(url, cn)
+    .then( hitFeature => {
+      console.log(hitFeature);
+      if(!hitFeature){
+        return {};
+      }else{
+        const p = hitFeature.properties;
+        return p;
+      }  
+    })
+    .catch( e => {
+      return {};
+    });
+    
+  }
+  
   /*************************************************/
   /*タイル読み込み関係設定                      */
   /*************************************************/
@@ -743,7 +873,7 @@ const disaportal = () => {
   const drawTileImages = (lat, lng, zl, px, ds, root="") => {
     
     const tiles = getTileList(lat, lng, zl, px);
-    console.log(tiles);
+    //console.log(tiles);
     
     const title = document.createElement('div');
     title.innerText = ds;
@@ -790,7 +920,7 @@ const disaportal = () => {
         };
         img.onerror = (err) => {
           
-          console.log(err);
+          //console.log(err);
           
           // 画像が見つからない場合、代替画像を追加
           const placeholderCanvas = document.createElement('canvas');
@@ -829,7 +959,7 @@ const disaportal = () => {
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
       
-      console.log(canvasWidth, canvasHeight);
+      //console.log(canvasWidth, canvasHeight);
       
       // 画像を描画
       let dox = 0;
@@ -840,7 +970,7 @@ const disaportal = () => {
       });
       
       imgs.forEach((imgInfo) => {
-        console.log(imgInfo);
+        //console.log(imgInfo);
         // drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
         const sx = imgInfo.xRange[0] - 1;
         const sy = imgInfo.yRange[0] - 1;
@@ -868,7 +998,7 @@ const disaportal = () => {
       
       const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const buf = data.data;
-      console.log(data);
+      //console.log(data);
       
       const tmp = {};
       const ch = buf.length / ( canvas.width * canvas.height );
@@ -897,7 +1027,7 @@ const disaportal = () => {
       };
       
       const keys = Object.keys(tmp).sort().reverse();
-      console.log(keys);
+      //console.log(keys);
       keys.forEach( name => {
         res.info.push(tmp[name]);
       });
