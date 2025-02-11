@@ -4548,10 +4548,7 @@ GSI.SearchResultDialog = GSI.Dialog.extend({
       console.log(results);
       const resultItem = results[0][0] || results[1][0];
       if(!resultItem) return;
-      const co = resultItem.geometry.coordinates;
-      DISAPORTAL.Utils.getRisk({
-        latlng: { lat: co[1], lng: co[0] }
-      }, resultItem.properties.title);
+      this.onResultClick(resultItem);
     }
     
   },
