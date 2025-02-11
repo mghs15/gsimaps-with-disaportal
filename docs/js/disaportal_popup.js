@@ -111,8 +111,13 @@ const disaportal = () => {
     getRisk(e);
   });
   
+  const queryString = window.location.search.substring(1);
+  const queryParams = new URLSearchParams(queryString);
+  
+  console.log(queryParams);
+  
   // クエリパラメータを利用した初回表示時のイベント
-  if(window.location.search.match("rkm=1")){
+  if(queryParams.get("rkm") == "1"){
     gsimaps._onMenuItemClick({item:{id:'riskmatomete'}});
     setTimeout(() => {
       const c = { latlng: map.getCenter() };
@@ -121,7 +126,71 @@ const disaportal = () => {
     }, 1);
   }
   
-  const getRisk = (e) => {
+  // 住所関連時のイベント
+  if(queryParams.has("q")){
+    gsimaps._onMenuItemClick({item:{id:'riskmatomete'}});
+    
+    const q = document.getElementById("query");
+    q.value = queryParams.get("q");
+    
+    const form = document.getElementById("search_f");
+    const evSubmit = new Event('submit');
+    form.dispatchEvent(evSubmit);
+    
+    // 変更の監視
+    const targetNode = document.querySelector(".searchresultdialog_ul");
+    const config = { attributes: true, childList: true, subtree: true };
+    const callback = (mutationList, observer) => {
+      
+      console.log("住所検索結果リストの変更を検知");
+      
+      const aqs = document.querySelectorAll(".searchresultdialog_ul li a");
+      const addrs = gsimaps._searchDialog.chimeiResult
+      for(let i=0; i<aqs.length; i++){
+        //console.log(aqs[i]);
+        
+        const func = () => {
+          if(!DISAPORTAL.GLOBAL.isRiskMatometeMode) return;
+          
+          const title = aqs[i].querySelector("div.title").innerText;
+          const coords = addrs[i].geometry.coordinates;
+          const lnglat = {latlng: { lng: coords[0], lat: coords[1] }};
+          console.log("ADDRTEST:クリックイベント");
+          
+          const tmpMarkerLatLng = DISAPORTAL.GLOBAL.clickPointMarker._latlng;
+          //console.log([tmpMarkerLatLng,lnglat]);
+          
+          /***
+           * 目的の変更以外の変更も検知して関数が追加されてしまうため、
+           * 既存のマーカーを見て、場所の変化があるのか確認する
+          ***/
+          
+          if(tmpMarkerLatLng 
+            && Math.abs(tmpMarkerLatLng.lng - lnglat.latlng.lng) < 0.0001
+            && Math.abs(tmpMarkerLatLng.lat - lnglat.latlng.lat) < 0.0001
+          ){
+            console.log("ADDRTEST:リスク取得をスキップ")
+            return;
+          }
+          
+          getRisk(lnglat, title);
+          
+        }
+        
+        aqs[i].addEventListener('click', func);
+      }
+      
+      const evClick = new Event('click');
+      aqs[0].dispatchEvent(evClick);
+      
+    };
+    
+    const observer = new MutationObserver(callback);
+    observer.observe(targetNode, config);
+    
+  }
+  
+  const getRisk = (e, title="") => {
     // 作図中は反応させない
     console.log(gsimaps);
     if(gsimaps._sakuzuDialog && gsimaps._sakuzuDialog.getVisible()) {
@@ -409,7 +478,9 @@ const disaportal = () => {
         desc.innerHTML = html;
         
         const detailTitle = document.createElement('div');
-        detailTitle.innerHTML = "<div style='background-color:#00316A;color:#FFF;padding:2px;border-radius:4px 4px 0px 0px;''>リスクをまとめて表示（詳細）</div>";
+        detailTitle.innerHTML = "<div style='background-color:#00316A;color:#FFF;padding:2px;border-radius:4px 4px 0px 0px;'>"
+              + "リスクをまとめて表示（詳細）" + (title ? "<br>" + title : "")
+              + "</div>";
         
         const imageGuide = document.createElement('div');
         imageGuide.innerHTML = "上記画像をクリックすると該当レイヤを追加します。もし該当レイヤが既に最上位に表示されている場合、削除します。";
@@ -469,7 +540,9 @@ const disaportal = () => {
         }
         
         html2 = "<div id='disasterPopupSummary'>"
-              + "<div style='background-color:#00316A;color:#FFF;padding:2px;border-radius:4px 4px 0px 0px;'>リスクをまとめて表示（概要）</div>"
+              + "<div style='background-color:#00316A;color:#FFF;padding:2px;border-radius:4px 4px 0px 0px;'>"
+              + "リスクをまとめて表示（概要）" + (title ? "<br>" + title : "")
+              + "</div>"
               + html2
               + "</div>";
         html2 += "<div><strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
@@ -547,6 +620,10 @@ const disaportal = () => {
         pop.appendChild(tabs);
         
         // ポップアップを地図に追加
+        // 既存のポップアップ用アイコンは削除
+        if(DISAPORTAL.GLOBAL.clickPointMarker){
+          map.removeLayer(DISAPORTAL.GLOBAL.clickPointMarker);
+        }
         DISAPORTAL.GLOBAL.clickPointMarker = L.marker([lat, lng])
           .addTo(map)
           .bindPopup(pop)
