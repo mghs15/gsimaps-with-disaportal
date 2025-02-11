@@ -194,11 +194,15 @@ const disaportal = () => {
     // 作図中は反応させない
     console.log(gsimaps);
     if(gsimaps._sakuzuDialog && gsimaps._sakuzuDialog.getVisible()) {
-      //alert('作図中は断面図を作成できません');
+      return;
+    }
+    if(gsimaps._crossSectionViewDialog && gsimaps._crossSectionViewDialog.getVisible()) {
+      return;
+    }
+    if(gsimaps._sakuzuDialog && gsimaps._sakuzuDialog.isMinimized()) {
       return;
     }
     if(gsimaps._crossSectionViewDialog && gsimaps._crossSectionViewDialog.isMinimized()) {
-      //alert('断面図最小化中は作図出来ません');
       return;
     }
     
