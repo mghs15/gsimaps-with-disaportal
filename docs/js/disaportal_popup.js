@@ -289,6 +289,7 @@ const disaportal = () => {
         // 詳細表示用
         let list = "";
         const imagesDiv = document.createElement('div');
+        imagesDiv.style["padding-top"] = "4px"; 
         // 概要表示用
         const riskInfo = {
           shinsuiArray: []
@@ -455,22 +456,33 @@ const disaportal = () => {
         
         const detailTitle = document.createElement('div');
         detailTitle.innerHTML = "<div style='background-color:#00316A;color:#FFF;padding:2px;border-radius:4px 4px 0px 0px;'>"
-              + "リスクをまとめて表示（詳細）" + (title ? "<br>" + title : "")
+              + "リスクをまとめて表示（詳細１）" + (title ? "<br>" + title : "")
               + "</div>";
-        
-        const imageGuide = document.createElement('div');
-        imageGuide.innerHTML = "上記画像をクリックすると該当レイヤを追加します。もし該当レイヤが既に最上位に表示されている場合、削除します。";
-        imageGuide.style["font-size"] = "0.75em";
         
         const detail = document.createElement('div');
         detail.id = "disasiterPopupDetail";
         
         detail.appendChild(detailTitle); // タイトル
-        detail.appendChild(document.createElement('hr'));
-        detail.appendChild(imagesDiv); // 取得ピクセルの画像
-        detail.appendChild(imageGuide); // 画像の説明
-        detail.appendChild(document.createElement('hr'));
         detail.appendChild(desc); // 取得した情報の内容
+        
+        
+        // 詳細表示用２（detail2）
+        const imageGuide = document.createElement('div');
+        imageGuide.innerHTML = "上記画像をクリックすると該当レイヤを追加します。もし該当レイヤが既に最上位に表示されている場合、削除します。";
+        imageGuide.style["font-size"] = "0.75em";
+        
+        const detailTitle2 = document.createElement('div');
+        detailTitle2.innerHTML = "<div style='background-color:#00316A;color:#FFF;padding:2px;border-radius:4px 4px 0px 0px;'>"
+              + "リスクをまとめて表示（詳細２）" + (title ? "<br>" + title : "")
+              + "</div>";
+        
+        const detail2 = document.createElement('div');
+        detail2.id = "disasiterPopupDetail";
+        
+        detail2.appendChild(detailTitle2); // タイトル
+        detail2.appendChild(imagesDiv); // 取得ピクセルの画像
+        detail2.appendChild(imageGuide); // 画像の説明
+
 
         // 概要表示用（summary）
         let html2 = "";
@@ -535,63 +547,70 @@ const disaportal = () => {
         const inactiveTextColor = "#FFFFFF";
           // "#0055AD" はホバー色なのでいったん採用見送り
         
-        const btn1 = document.createElement('a');
-        btn1.href = "javascript:void(0);";
-        btn1.innerText = "詳細";
-        btn1.style["background-color"] = inactiveBgColor;
-        btn1.style.color = inactiveTextColor;
-        btn1.style.display = "inline-block";
-        btn1.style.cursor = "pointer";
-        btn1.style["text-decoration"] = "none";
-        btn1.style.padding = "4px";
-        btn1.style.margin = "0px 0px 4px 4px";
-        btn1.style["border-radius"] = "0px 0px 2px 2px";
+        // タブボタン設定
+        const createTabBtn = (id, text, isActive) => {
+          const btn = document.createElement('a');
+          btn.id = id;
+          btn.href = "javascript:void(0);";
+          btn.innerText = text;
+          btn.style["background-color"] = isActive ? activeBgColor : inactiveBgColor;
+          btn.style.color = isActive ? activeTextColor : inactiveTextColor;
+          btn.style.display = "inline-block";
+          btn.style.cursor = "pointer";
+          btn.style["text-decoration"] = "none";
+          btn.style.padding = "4px 8px";
+          btn.style.margin = "0px 0px 8px 8px";
+          btn.style["border-radius"] = "0px 0px 2px 2px";
+          return btn;
+        } 
         
-        const btn2 = document.createElement('a');
-        btn2.href = "javascript:void(0);";
-        btn2.innerText = "概要";
-        btn2.style["background-color"] = activeBgColor;
-        btn2.style.color = activeTextColor;
-        btn2.style.display = "inline-block";
-        btn2.style.cursor = "pointer";
-        btn2.style["text-decoration"] = "none";
-        btn2.style.padding = "4px";
-        btn2.style.margin = "0px 0px 4px 4px";
-        btn2.style["border-radius"] = "0px 0px 2px 2px";
+        const changeTab = id => {
+          tabSet.forEach( t => {
+            const [btn, cnt] = t;
+            if(btn.id == id){
+              btn.style["background-color"] = activeBgColor;
+              btn.style.color = activeTextColor;
+              cnt.style.display = "block";
+            }else{
+              btn.style["background-color"] = inactiveBgColor;
+              btn.style.color = inactiveTextColor;
+              cnt.style.display = "none";
+            }
+          });
+        }
         
-        btn1.addEventListener('click', ()=>{
-          btn2.style["background-color"] = inactiveBgColor;
-          btn2.style.color = inactiveTextColor;
-          summary.style.display = "none";
-          btn1.style["background-color"] = activeBgColor;
-          btn1.style.color = activeTextColor;
-          detail.style.display = "block";
-        });
+        const btn1 = createTabBtn("riskMatometePopupTab1", "概要", true);
+        const btn2 = createTabBtn("riskMatometePopupTab2", "詳細１", false);
+        const btn3 = createTabBtn("riskMatometePopupTab3", "詳細２", false);
         
-        btn2.addEventListener('click', ()=>{
-          btn1.style["background-color"] = inactiveBgColor;
-          btn1.style.color = inactiveTextColor;
-          detail.style.display = "none";
-          btn2.style["background-color"] = activeBgColor;
-          btn2.style.color = activeTextColor;
-          summary.style.display = "block";
-        });
+        const tabSet = [
+          [btn1, summary],
+          [btn2, detail],
+          [btn3, detail2],
+        ];
         
-        tabs.appendChild(btn2);
+        btn1.addEventListener('click', () =>{ changeTab("riskMatometePopupTab1"); });
+        btn2.addEventListener('click', () =>{ changeTab("riskMatometePopupTab2"); });
+        btn3.addEventListener('click', () =>{ changeTab("riskMatometePopupTab3"); });
+        
+        // タブ全体
         tabs.appendChild(btn1);
+        tabs.appendChild(btn2);
+        tabs.appendChild(btn3);
         tabs.style["border-top"] = `4px solid ${activeBgColor}`;
         tabs.style["margin-top"] = "2px";
         tabs.style["background-color"] = inactiveBgColor;
         tabs.style["border-radius"] = "0px 0px 4px 4px";
         
         detail.style.display = "none"; // 最初は 詳細 は非表示
+        detail2.style.display = "none"; // 最初は 詳細 は非表示
         
         const pop = document.createElement('div');
         pop.style.border = `3px solid ${inactiveBgColor}`;
         pop.style["border-radius"] = "8px";
         pop.style.padding = "1px";
         
-        
+        // 住所取得とポップアップ
         getAddress(e)
         .then( p => {
           console.log(p);
@@ -607,6 +626,7 @@ const disaportal = () => {
           
           pop.appendChild(summary);
           pop.appendChild(detail);
+          pop.appendChild(detail2);
           pop.appendChild(wa);
           pop.appendChild(tabs);
         
