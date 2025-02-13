@@ -191,79 +191,153 @@ const disaportal = () => {
           
     if(!DISAPORTAL.GLOBAL.isRiskMatometeMode){
       // 通常モード
-      // １番上に表示されている災害リスク情報のみを表示
+      
+      // タブ用（tabs）
+      const tabs = document.createElement('div');
+      
+      const activeBgColor = "#00316A";
+      const activeTextColor = "#FFFFFF";
+      const inactiveBgColor = "#00316A";
+      const inactiveTextColor = "#FFFFFF";
+        // "#0055AD" はホバー色なのでいったん採用見送り
+      
+      // タブボタン設定
+      const createTabBtn = (id, text, isActive) => {
+        const btn = document.createElement('a');
+        btn.id = id;
+        btn.href = "javascript:void(0);";
+        btn.innerText = text;
+        btn.style["background-color"] = isActive ? activeBgColor : inactiveBgColor;
+        btn.style.color = isActive ? activeTextColor : inactiveTextColor;
+        btn.style.display = "block";
+        btn.style.cursor = "pointer";
+        btn.style["text-decoration"] = "none";
+        btn.style.padding = "2px";
+        btn.style.margin = "2px";
+        btn.style["border-radius"] = "4px";
+        return btn;
+      } 
+      
+      const tabSet = [];
+      
+      // 表示されている災害リスク情報のみを表示
       for(let i=0; i < layers.length; i++){
         const layerId = layers[i];
         const isVisible = +disp[i];
         if(isVisible && DISAPORTAL.CONGFIG.popupTargetLayers.includes(layerId)){
-          drawTileImages(lat, lng, zl, px, layerId, "").then( res =>{
-          
-            console.log(res);
-
-            // ポップアップ処理
-            const layerId = res.layerId;
-            const canvas = res.canvas;
-            const info = res.info
-            
-            let html = "<table>";
-            info.sort((a, b) => b.rank - a.rank).forEach( risk => {
-              const bgColor = risk.rank ? `rgb(${risk.rgb[0]},${risk.rgb[1]},${risk.rgb[2]})` : `rgb(200,200,200)`;
-              const ratio = Math.floor(risk.count/(canvas.width * canvas.height) * 100);
-              const s = `<tr style="background-color:${bgColor}">`
-                      + `<td>${risk.msg}</td><td>${risk.count}</td><td>${ratio}%</td></tr>`;
-              html += s;
-            });
-            
-            
-            html += "</table>" + `<div>※読込 ZL：${zl}, バッファ：${px} px,<br>
-                                  ピクセル総数：${canvas.width * canvas.height}</div>`;
-                                  
-            const div = document.createElement('div');
-            div.innerHTML = html;
-            
-            const category = getCategoryFromLayerId(layerId);
-            const title = document.createElement('div');
-            title.innerHTML = "<div>" + category + " " + layerId + "</div>";
-            
-            const parent = document.createElement('div');
-            parent.appendChild(title);
-            canvas.style.border = `2px solid rgb(150,150,150)` ;
-            parent.appendChild(canvas);
-            parent.appendChild(div);
-            
-            getAddress(e)
-            .then( p => {
-              console.log(p);
-              
-              let addr = "住所は取得できませんでした";
-              if(p.muni){
-                const wurl = "https://disaportal.gsi.go.jp/hazardmap/index.html?citycode=" + p["行政コード"];
-                addr = `<a href="${wurl}" target="_blank">${p.pref} ${p.muni}</a> ${p.LV01} 付近`;
-              }
-              
-              const wa = document.createElement('div');
-              wa.innerHTML = "<hr>" + addr;
-              
-              parent.appendChild(wa);
-              
-              // 既存のポップアップ用アイコンは削除
-              if(DISAPORTAL.GLOBAL.clickPointMarker){
-                map.removeLayer(DISAPORTAL.GLOBAL.clickPointMarker);
-              }
-              DISAPORTAL.GLOBAL.clickPointMarker = L.marker([lat, lng])
-                .addTo(map)
-                .bindPopup(parent)
-                .openPopup();
-            
-            });
-          
-          });
-          
-          // 上に表示されているレイヤのみ表示するため、ヒットがあれば後続のレイヤは確認せず終了
-          break;
-          
+          const div = document.createElement('div');
+          const btn = createTabBtn(layerId, layerId, false);
+          tabSet.push([btn, div]);
         }
       }
+      
+      const createPopupHtml = (layerId) => {
+        return drawTileImages(lat, lng, zl, px, layerId, "").then( res =>{
+          
+          // ポップアップ処理
+          const layerId = res.layerId;
+          const canvas = res.canvas;
+          const info = res.info
+          
+          let html = "<table>";
+          info.sort((a, b) => b.rank - a.rank).forEach( risk => {
+            const bgColor = risk.rank ? `rgb(${risk.rgb[0]},${risk.rgb[1]},${risk.rgb[2]})` : `rgb(200,200,200)`;
+            const ratio = Math.floor(risk.count/(canvas.width * canvas.height) * 100);
+            const s = `<tr style="background-color:${bgColor}">`
+                    + `<td>${risk.msg}</td><td>${risk.count}</td><td>${ratio}%</td></tr>`;
+            html += s;
+          });
+          
+          
+          html += "</table>" + `<div>※読込 ZL：${zl}, バッファ：${px} px,
+                                ピクセル総数：${canvas.width * canvas.height}</div>`;
+                                
+          const div = document.createElement('div');
+          div.innerHTML = html;
+          
+          const category = getCategoryFromLayerId(layerId);
+          const title = document.createElement('div');
+          title.innerHTML = "<div>" + category + " " + layerId + "</div>";
+          
+          const parent = document.createElement('div');
+          parent.appendChild(title);
+          canvas.style.border = `2px solid rgb(150,150,150)` ;
+          parent.appendChild(canvas);
+          parent.appendChild(div);
+          
+          return parent;
+          
+        });
+      } 
+      
+      const changeTab = id => {
+        tabSet.forEach( t => {
+          const [btn, cnt] = t;
+          if(btn.id == id && cnt.style.display == "none"){
+            if(!cnt.hasChildNodes()){
+              // 遅延読込用の処理
+              // ボタンの ID が layer id と一致することを前提
+              createPopupHtml(btn.id).then( el => {;
+                cnt.appendChild(el);
+              });
+            }
+            btn.style["background-color"] = activeBgColor;
+            btn.style.color = activeTextColor;
+            cnt.style.display = "block";
+          }else{
+            btn.style["background-color"] = inactiveBgColor;
+            btn.style.color = inactiveTextColor;
+            cnt.style.display = "none";
+          }
+        });
+      }
+      
+      for(let i=0; i<tabSet.length; i++){
+        const t = tabSet[i];
+        const [btn, cnt] = t;
+        
+        btn.addEventListener('click', () =>{ changeTab(btn.id); });
+        if(i > 0){ 
+          cnt.style.display = "none";
+        }else{
+          // ボタンの ID が layer id と一致することを前提
+          createPopupHtml(btn.id).then( el => {;
+            cnt.appendChild(el);
+          });
+        }
+        
+        cnt.style["padding-left"] = "1em";
+        
+        tabs.appendChild(btn);
+        tabs.appendChild(cnt);
+
+      }
+      
+      getAddress(e)
+      .then( p => {
+        console.log(p);
+        
+        let addr = "住所は取得できませんでした";
+        if(p.muni){
+          const wurl = "https://disaportal.gsi.go.jp/hazardmap/index.html?citycode=" + p["行政コード"];
+          addr = `<a href="${wurl}" target="_blank">${p.pref} ${p.muni}</a> ${p.LV01} 付近`;
+        }
+        
+        const wa = document.createElement('div');
+        wa.innerHTML = "<hr>" + addr;
+        
+        tabs.appendChild(wa);
+        
+        // 既存のポップアップ用アイコンは削除
+        if(DISAPORTAL.GLOBAL.clickPointMarker){
+          map.removeLayer(DISAPORTAL.GLOBAL.clickPointMarker);
+        }
+        DISAPORTAL.GLOBAL.clickPointMarker = L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup(tabs)
+          .openPopup();
+      
+      });
       
     }else{
     
@@ -448,7 +522,7 @@ const disaportal = () => {
         if(!list) list = "<li>リスク情報を検索できませんでした。</li>";
         let html = "<div>";
         html += "<ol>" + list + "</ol>";
-        html += "<strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong>"
+        //html += "<strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong>"
         html += "</div>";
         
         const desc = document.createElement('div');
@@ -478,7 +552,7 @@ const disaportal = () => {
         
         const detail2 = document.createElement('div');
         detail2.id = "disasiterPopupDetail";
-        
+
         detail2.appendChild(detailTitle2); // タイトル
         detail2.appendChild(imagesDiv); // 取得ピクセルの画像
         detail2.appendChild(imageGuide); // 画像の説明
@@ -533,8 +607,6 @@ const disaportal = () => {
               + "</div>"
               + html2
               + "</div>";
-        html2 += "<div><strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
-
         const summary = document.createElement('div');
         summary.innerHTML = html2;
         
@@ -622,7 +694,8 @@ const disaportal = () => {
           }
           
           const wa = document.createElement('div');
-          wa.innerHTML = "<hr>" + addr;
+          const note = "<div><strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
+          wa.innerHTML = note + "<hr>" + addr;
           
           pop.appendChild(summary);
           pop.appendChild(detail);
