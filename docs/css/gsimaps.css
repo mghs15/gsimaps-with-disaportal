@@ -1402,7 +1402,7 @@ form {
 	position: absolute;
 	z-index: 10000;
 	right: 0;
-	bottom: 120px;
+	/* bottom: 120px; */
 }
 
 .gsi_dialogmanager_minimizecontainer a {

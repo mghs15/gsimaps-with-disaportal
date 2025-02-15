@@ -120,6 +120,7 @@ const getDetailCategoryFromLayerId = (layerId) => {
 const disaportal = () => {
   
   alert("本サイトは、国土地理院のサイトではありませんのでご注意ください。");
+  alert("災害リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。");
   
   console.log(GSI);
   const gsimaps = GSI.GLOBALS.gsimaps;
@@ -357,7 +358,8 @@ const disaportal = () => {
         }
         
         const wa = document.createElement('div');
-        wa.innerHTML = "<hr>" + addr;
+        const note = "<div><strong style='font-size:7.5pt;'>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
+        wa.innerHTML = note + "<hr>" + addr;
         
         tabs.appendChild(wa);
         
@@ -426,92 +428,12 @@ const disaportal = () => {
           console.log(mostDangerousRiskInfo);
           if(!mostDangerousRiskInfo.rank) return;
           
-          // レイヤの追加用関数
-          const addLayer = () => {
-            const _tmpUrl = new URL(window.location.href);
-            console.log(_tmpUrl);
-            const _tmpHash = _tmpUrl.hash;
-            const _params = _tmpHash.split("&");
-            
-            // パラメータをデコード
-            const paramObj = {};
-            for(let i=0; i<_params.length; i++){
-              const [key, cont] = _params[i].split("=");
-              if(key == "ls") {
-                paramObj[key] = cont.split("%7C");
-              }else if(key == "disp"){ 
-                paramObj[key] = cont.split("");
-              }else if(key == "blend"){ 
-                paramObj[key] = cont.split("");
-              }else{ 
-                paramObj[key] = cont;
-              }
-            }
-            
-            // blend パラメータは存在しないことがあるので前処理
-            // なお、１番下のレイヤの乗算処理は効かない
-            if(!paramObj.blend){
-              const _tmpBlend = "0".repeat(paramObj.ls.length - 1);
-              paramObj.blend = _tmpBlend.split("");
-              _params.push("blend=" + _tmpBlend);
-            }
-            
-            // 既存のレイヤをパラメータから削除
-            let tmpLayerOrder = -1;
-            const tmpLayerLength = paramObj.ls.length;
-            for(let i=0; i<tmpLayerLength; i++){
-              if(paramObj.ls[i] == layerId){
-                console.log(i);
-                paramObj.ls.splice(i, 1);
-                paramObj.disp.splice(i, 1);
-                paramObj.blend.splice(i - 1, 1); 
-                tmpLayerOrder = i;
-              }
-            }
-            
-            // 新たに最上位に目的のレイヤを追加
-            // ※もともと最上位の場合は削除する
-            if(tmpLayerOrder < tmpLayerLength - 1){
-              paramObj.ls.push(layerId);
-              paramObj.disp.push("1");
-              paramObj.blend.push("0");
-            }
-            
-            // 新たな ls, disp, blend パラメータの生成
-            const newLs = "ls=" + paramObj.ls.join("%7C");
-            const newDisp = "disp=" + paramObj.disp.join("");
-            const newBlend = "blend=" + paramObj.blend.join("");
-            
-            // ハッシュ部の再生成
-            const _newParams = [];
-            
-            for(let i=0; i<_params.length; i++){
-              let param = "";
-              if(_params[i].match(/^ls=/)){
-                param = newLs;
-              }else if(_params[i].match(/^disp=/)){
-                param = newDisp;
-              }else if(_params[i].match(/^blend=/)){
-                param = newBlend;
-              }else{
-                param = _params[i];
-              }
-              _newParams.push(param);
-            }
-            
-            const _newHash = _newParams.join("&");
-            
-            // URL の再生成と設定
-            const _newUrl = _tmpUrl.origin + _tmpUrl.pathname + _tmpUrl.search + _newHash;
-            console.log(_newHash);
-            console.log("新しく " + _newUrl + " へ遷移");
-            window.location.replace(_newUrl);
-          }
-          
           // canvas の追加設定
           canvas.style.border = `2px solid rgb(${mostDangerousRiskInfo.rgb[0]},${mostDangerousRiskInfo.rgb[1]},${mostDangerousRiskInfo.rgb[2]})` ;
           canvas.style.cursor = "pointer";
-          canvas.addEventListener('click', addLayer);
+          canvas.addEventListener('click', () => {
+            addRemoveLayer(layerId);
+          });
           imagesDiv.appendChild(canvas);
           
           // 災害種別を設定
@@ -727,7 +649,7 @@ const disaportal = () => {
           }
           
           const wa = document.createElement('div');
-          const note = "<div><strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
+          const note = "<div><strong style='font-size:7.5pt;'>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
           wa.innerHTML = note + "<hr>" + addr;
           
           pop.appendChild(summary);
@@ -835,7 +757,7 @@ const disaportal = () => {
          
       });
       
-      const note = "<div><strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
+      const note = "<div><strong style='font-size:7.5pt;'>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
       riskInfoStr += note;
       
       // フッターへ反映
@@ -845,6 +767,100 @@ const disaportal = () => {
     });
     
   } // getRiskForFooter() おわり
+
+
+
+  /*************************************************/
+  /*レイヤの追加用関数                      */
+  /*************************************************/
+  const addRemoveLayer = (layerId) => {
+    addLayer(layerId, {
+      isTopRemove: true
+    });
+  }
+  
+  const addLayer = (layerId, options) => {
+    const _tmpUrl = new URL(window.location.href);
+    console.log(_tmpUrl);
+    const _tmpHash = _tmpUrl.hash;
+    const _params = _tmpHash.split("&");
+    
+    // パラメータをデコード
+    const paramObj = {};
+    for(let i=0; i<_params.length; i++){
+      const [key, cont] = _params[i].split("=");
+      if(key == "ls") {
+        paramObj[key] = cont.split("%7C");
+      }else if(key == "disp"){ 
+        paramObj[key] = cont.split("");
+      }else if(key == "blend"){ 
+        paramObj[key] = cont.split("");
+      }else{ 
+        paramObj[key] = cont;
+      }
+    }
+    
+    // blend パラメータは存在しないことがあるので前処理
+    // なお、１番下のレイヤの乗算処理は効かない
+    if(!paramObj.blend){
+      const _tmpBlend = "0".repeat(paramObj.ls.length - 1);
+      paramObj.blend = _tmpBlend.split("");
+      _params.push("blend=" + _tmpBlend);
+    }
+    
+    // 既存のレイヤをパラメータから削除
+    let tmpLayerOrder = -1;
+    const tmpLayerLength = paramObj.ls.length;
+    for(let i=0; i<tmpLayerLength; i++){
+      if(paramObj.ls[i] == layerId){
+        console.log(i);
+        paramObj.ls.splice(i, 1);
+        paramObj.disp.splice(i, 1);
+        paramObj.blend.splice(i - 1, 1); 
+        tmpLayerOrder = i;
+      }
+    }
+    
+    // 新たに最上位に目的のレイヤを追加
+    // ※もともと最上位の場合は削除する
+    if(options.isTopRemove){
+      if(tmpLayerOrder < tmpLayerLength - 1){
+        paramObj.ls.push(layerId);
+        paramObj.disp.push("1");
+        paramObj.blend.push("0");
+      }
+    }
+    
+    // 新たな ls, disp, blend パラメータの生成
+    const newLs = "ls=" + paramObj.ls.join("%7C");
+    const newDisp = "disp=" + paramObj.disp.join("");
+    const newBlend = "blend=" + paramObj.blend.join("");
+    
+    // ハッシュ部の再生成
+    const _newParams = [];
+    
+    for(let i=0; i<_params.length; i++){
+      let param = "";
+      if(_params[i].match(/^ls=/)){
+        param = newLs;
+      }else if(_params[i].match(/^disp=/)){
+        param = newDisp;
+      }else if(_params[i].match(/^blend=/)){
+        param = newBlend;
+      }else{
+        param = _params[i];
+      }
+      _newParams.push(param);
+    }
+    
+    const _newHash = _newParams.join("&");
+    
+    // URL の再生成と設定
+    const _newUrl = _tmpUrl.origin + _tmpUrl.pathname + _tmpUrl.search + _newHash;
+    console.log(_newHash);
+    console.log("新しく " + _newUrl + " へ遷移");
+    window.location.replace(_newUrl);
+  }
 
   /*************************************************/
   /*住所取得関係設定                      */
