@@ -1,7 +1,4 @@
 
-alert("本サイトは、国土地理院のサイトではありませんのでご注意ください。")
-
-
 /************************************************************************
  ポップアップ凡例用テーブル
  ************************************************************************/
@@ -100,18 +97,53 @@ const getCategoryFromLayerId = (layerId) => {
   return category;
 }
 
+const getDetailCategoryFromLayerId = (layerId) => {
+  const p = layerId.substring(0, 2);
+  let category = "";
+  if(p == "01" && layerId.match("l1")) category = "洪水(L1)";
+  if(p == "01" && layerId.match("l2")) category = "洪水(L2)";
+  if(p == "01" && layerId.match("keizoku")) category = "洪水(浸水継続)";
+  if(p == "01" && layerId.match("hanran")) category = "洪水(氾濫流)";
+  if(p == "01" && layerId.match("kagan")) category = "洪水(河岸浸食)";
+  
+  if(p == "02") category = "内水";
+  if(p == "03") category = "高潮";
+  if(p == "04") category = "津波";
+  
+  if(p == "05" && layerId.match("jisuberi")) category = "地すべり";
+  if(p == "05" && layerId.match("dosekiryu")) category = "土石流";
+  if(p == "05" && layerId.match("kyukeisha")) category = "急傾斜地の崩壊";
+  
+  return category;
+}
+
 const disaportal = () => {
+  
+  alert("本サイトは、国土地理院のサイトではありませんのでご注意ください。");
   
   console.log(GSI);
   const gsimaps = GSI.GLOBALS.gsimaps;
   console.log(gsimaps);
   const map = gsimaps._mainMap._map;
   console.log(map);
+  const footer = gsimaps._mainMap._footer;
   
   // クリック時イベント設定
   map.on('click', (e) => {
     getRisk(e);
   });
+  
+  // 移動時イベント設定
+  map.on('moveend', (e) => {
+    const c = { latlng: map.getCenter() };
+    getRiskForFooter(c);
+  });
+  
+  map.on('layeradd', (e) => {
+    const c = { latlng: map.getCenter() };
+    getRiskForFooter(c);
+  });
+  
   
   const queryString = window.location.search.substring(1);
   const queryParams = new URLSearchParams(queryString);
@@ -226,7 +258,8 @@ const disaportal = () => {
         const isVisible = +disp[i];
         if(isVisible && DISAPORTAL.CONGFIG.popupTargetLayers.includes(layerId)){
           const div = document.createElement('div');
-          const btn = createTabBtn(layerId, layerId, false);
+          const detailCategory = getDetailCategoryFromLayerId(layerId);
+          const btn = createTabBtn(layerId, detailCategory, false);
           tabSet.push([btn, div]);
         }
       }
@@ -255,9 +288,9 @@ const disaportal = () => {
           const div = document.createElement('div');
           div.innerHTML = html;
           
-          const category = getCategoryFromLayerId(layerId);
+          const detailCategory = getDetailCategoryFromLayerId(layerId);
           const title = document.createElement('div');
-          title.innerHTML = "<div>" + category + " " + layerId + "</div>";
+          title.innerHTML = "<div>" + detailCategory + "</div>";
           
           const parent = document.createElement('div');
           parent.appendChild(title);
@@ -379,7 +412,7 @@ const disaportal = () => {
           canvas.style.width = "64px";
           canvas.style.height = "64px";
           canvas.style["margin-left"] = "4px";
-          canvas.title = layerId;
+          canvas.title = getDetailCategoryFromLayerId(layerId) + " " + layerId;
           
           // std の場合、canvas 追加のみで終了
           if(layerId == "std"){
@@ -484,10 +517,11 @@ const disaportal = () => {
           // 災害種別を設定
           console.log(layerId);
           const category = getCategoryFromLayerId(layerId);
+          const detailCategory = getDetailCategoryFromLayerId(layerId);
           if(!category) return;
           
           // 詳細作成用
-          list += "<li>" + category + " " + mostDangerousRiskInfo.span + "</li>";
+          list += "<li>" + detailCategory + " " + mostDangerousRiskInfo.span + "</li>";
           
           // 概要作成用 
           if(layerId.match("keizoku")){
@@ -522,7 +556,6 @@ const disaportal = () => {
         if(!list) list = "<li>リスク情報を検索できませんでした。</li>";
         let html = "<div>";
         html += "<ol>" + list + "</ol>";
-        //html += "<strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong>"
         html += "</div>";
         
         const desc = document.createElement('div');
@@ -721,6 +754,97 @@ const disaportal = () => {
   } // getRisk() おわり
   
   DISAPORTAL.Utils.getRisk = getRisk;
+
+  const getRiskForFooter = (e) => {
+    
+    // 対象経緯度
+    console.log(e);
+    const lng = e.latlng.lng;
+    const lat = e.latlng.lat;
+    
+    // URL のハッシュパラメータから表示レイヤを取得    
+    const _url = new URL(window.location.href);
+    const _hash = _url.hash;
+    if(!_hash) return;
+    
+    const _ls = _hash.split("&").filter( x => x.match("ls="));
+    const layers = _ls[0].replace("ls=", "").split("%7C").reverse(); // 表示順に合わせる
+    const _disp = _hash.split("&").filter( x => x.match("disp="));
+    const disp = _disp[0].replace("disp=", "").split("").reverse(); // 表示順に合わせる
+    
+    // ポップアップの取得対象の設定
+    const px = DISAPORTAL.GLOBAL.riskGetRange;
+    const zl = DISAPORTAL.GLOBAL.riskGetZoom;
+    
+    const pmset = [];
+    
+    // 表示されている災害リスク情報のみを表示
+    for(let i=0; i < layers.length; i++){
+      const layerId = layers[i];
+      const isVisible = +disp[i];
+      if(isVisible && DISAPORTAL.CONGFIG.popupTargetLayers.includes(layerId)){
+        // ここでフッターへセット
+        // 災害種別を設定
+        const pm = drawTileImages(lat, lng, zl, px, layerId, "");
+        pmset.push(pm);
+      }
+    }
+    
+    Promise.all(pmset).then((values) => {
+      console.log(values);
+      
+      // 詳細表示用
+      const imagesDiv = document.createElement('span');
+      
+      // 概要表示用
+      let riskInfoStr = "";
+      
+      values.forEach( res => {
+        // ポップアップ処理
+        const layerId = res.layerId;
+        const canvas = res.canvas;
+        const info = res.info
+        
+        // 災害リスク情報は、ヒットがあれば canvas と説明文を追加
+        const mostDangerousRiskInfo = info.sort((a, b) => b.rank - a.rank)[0];
+        //console.log(mostDangerousRiskInfo);
+        //if(!mostDangerousRiskInfo.rank) return;
+        
+        // canvas の共通設定
+        canvas.style.width = "32px";
+        canvas.style.height = "32px";
+        canvas.style["vertical-align"] = "bottom";
+        canvas.style["margin-top"] = "4px";
+        canvas.style["margin-left"] = "4px";
+        canvas.style.padding = "1px";
+        canvas.title = getDetailCategoryFromLayerId(layerId) + " " + mostDangerousRiskInfo.description + " (" + layerId + ")";
+        const lineStyle = mostDangerousRiskInfo.rank ? "solid" : "dashed";
+        const rgb = mostDangerousRiskInfo.rank ? mostDangerousRiskInfo.rgb : [255, 255, 255];
+        canvas.style.border = `1px ${lineStyle} rgb(${rgb[0]},${rgb[1]},${rgb[2]})` ;
+        
+        imagesDiv.appendChild(canvas);
+        
+        // 災害種別を設定
+        console.log(layerId);
+        const category = getDetailCategoryFromLayerId(layerId);
+        if(!category) return;
+        //if(!mostDangerousRiskInfo.rank) return; // ヒットしなければ、文字情報で表示しない
+        
+        // 概要作成用 
+        riskInfoStr += category + " " + mostDangerousRiskInfo.description + "; ";
+         
+      });
+      
+      const note = "<div><strong>※リスクがあっても検索・表示できない場合があります。実際のリスクは、自治体のハザードマップ等で確認をお願いします。</strong></div>";
+      riskInfoStr += note;
+      
+      // フッターへ反映
+      footer._disaportalCanvasView.html(imagesDiv); // 設定(jQuery による)
+      footer._disaportalView.html(riskInfoStr);     // 設定(jQuery による)
+      
+    });
+    
+  } // getRiskForFooter() おわり
 
   /*************************************************/
   /*住所取得関係設定                      */
@@ -1129,8 +1253,82 @@ const disaportal = () => {
       
     }
   };
+  
+  /************************************************************************
+   L.Class
+   - GSI.Footer
+   ************************************************************************/
+  // メインの地図のみ
+  // footer : GSI.GLOBALS.gsimaps._mainMap._footer;
+  
+  // canvas 用
+  footer._createDisaportalCanvasContainer = function (parentContainer) {
+    const strNoData = "";
+    var container = $("<div>").addClass("item-frame");
+    var disaportalCanvasLabel = $("<span>").addClass("heading").html("プレビュー: ");
+    this._disaportalCanvasView = $("<span>").addClass("disaportalcanvas").html(strNoData);
+
+    container.append(disaportalCanvasLabel).append(this._disaportalCanvasView);
+    
+    parentContainer.prepend(container);
+    return container;
+  }
+  
+  footer._disaportalCanvasContainer = footer._createDisaportalCanvasContainer(footer._container);
+  
+  // 文字情報用
+  footer._createDisaportalContainer = function (parentContainer) {
+    const strNoData = "";
+    var container = $("<div>").addClass("item-frame");
+    var disaportalLabel = $("<span>").addClass("heading").html("表示中の災害リスク: ");
+    this._disaportalView = $("<span>").addClass("disaportalinfo").html(strNoData);
+
+    container.append(disaportalLabel).append(this._disaportalView);
+    
+    parentContainer.prepend(container);
+    return container;
+  }
+  
+  footer._disaportalContainer = footer._createDisaportalContainer(footer._container);
+  
+  // オーバーライド
+  const originalStartMiniMode = footer._startMiniMode;
+  footer._startMiniMode = function (b) {
+    footer._disaportalContainer.hide();
+    footer._disaportalCanvasContainer.show();
+    return originalStartMiniMode.apply(this, [b]);
+  }
+  const originalStartLargeMode = footer._startLargeMode;
+  footer._startLargeMode = function (b) {
+    footer._disaportalContainer.show();
+    footer._disaportalCanvasContainer.show();
+    return originalStartLargeMode.apply(this, [b]);
+  }
+  
+  // 初期表示
+  setTimeout(() => {
+    
+    switch (footer._dispMode) {
+      case GSI.Footer.DISP_CLOSE:
+        footer._startCloseMode(true);
+        break;
+      case GSI.Footer.DISP_LARGE:
+        footer._startLargeMode(true);
+        break;
+      default:
+        footer._startMiniMode(true);
+        break;
+    }
+    
+    const c = { latlng: map.getCenter() };
+    getRiskForFooter(c);
+    
+  }, 1000);
+  
 }
 
+  
+  
 /************************************************************************
  L.Class
  - GSI.RiskMatometeDialog
