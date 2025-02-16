@@ -823,12 +823,15 @@ const disaportal = () => {
     
     // 新たに最上位に目的のレイヤを追加
     // ※もともと最上位の場合は削除する
-    if(options.isTopRemove){
-      if(tmpLayerOrder < tmpLayerLength - 1){
-        paramObj.ls.push(layerId);
-        paramObj.disp.push("1");
-        paramObj.blend.push("0");
-      }
+    // ※もともと最上位の場合は削除する
+    if(tmpLayerOrder < tmpLayerLength - 1){
+      paramObj.ls.push(layerId);
+      paramObj.disp.push("1");
+      paramObj.blend.push("0");
+    }else if(!options.isTopRemove){
+      paramObj.ls.push(layerId);
+      paramObj.disp.push("1");
+      paramObj.blend.push("0");
     }
     
     // 新たな ls, disp, blend パラメータの生成
