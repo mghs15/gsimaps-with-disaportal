@@ -172,6 +172,26 @@ const disaportal = () => {
     
     // これ以降の処理は、gsimaps.js 内に直接追加
     
+    // 住所検索窓から、検索結果へスムーズに移動できるように、
+    // 検索窓の次に検索結果ダイアログを表示させる。
+    // 一度移動させれば、リロードしない限り有効と思われる。
+    // ただし、文書構造は変化することに注意（CSS も崩れる）。
+    setTimeout(() => {
+      // 移動させたい Node
+      const p = document
+        .querySelector(".searchresultdialog_select_frame")
+        .parentNode  // <div> のみ
+        .parentNode  // gsi_dialog_content
+        .parentNode; // 目的の親（gsi_dialog ui-draggable ui-resizable）
+      // 移動先の Node（親及び挿入箇所）
+      const t = document
+        .querySelector(".gsi-header-tools");
+      const p2 = t.parentNode; 
+      // 移動
+      p2.insertBefore(p, t);
+      // スタイル修正
+      p.style["line-height"] = "normal";
+    }, 1);
   }
   
   const getRisk = (e, title="") => {
@@ -371,9 +391,9 @@ const disaportal = () => {
           .addTo(map)
           .bindPopup(tabs)
           .openPopup();
-      
+          
       });
-      
+        
     }else{
     
       // リスクをまとめて検索モード
